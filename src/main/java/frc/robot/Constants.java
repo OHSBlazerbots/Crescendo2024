@@ -16,4 +16,12 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static final class ShooterConstants {
+    public static final int kShooterMotorPort = 29;
+
+    public static final Gains kShooterGains = new Gains(0.15, 0.0, 0.0, 0.0, 200, 1.00);
+    // public static final int kUpeprEncoderRotationsAtMaxHeight = -2004016; // TODO: determine emperically
+    // public static final int UpperWenchSafeWenchPosition = -332606;
+  }
+
 }
