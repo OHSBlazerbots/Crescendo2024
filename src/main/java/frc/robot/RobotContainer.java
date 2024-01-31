@@ -8,10 +8,22 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.AbsoluteDrive;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Constants.IOConstants;
+import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import java.io.File;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,16 +34,67 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
+  // private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
+  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
+                                                                         "swerve/neo"));
+  XboxController m_driverController = new XboxController(IOConstants.kDriverControllerPort);
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    // m_DriveSubsystem.setDefaultCommand(
+    //    // A split-stick arcade command, with forward/backward controlled by the left
+    //    // hand, and turning controlled by the right.
+    //     Commands.run(
+    //        () -> m_DriveSubsystem.AbsoluteDrive(
+    //         -m_driverController.getLeftY(),
+    //          m_driverController.getLeftX()),
+    //        m_DriveSubsystem));
+    AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
+      () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
+          OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(m_driverController.getLeftX(),
+            OperatorConstants.LEFT_X_DEADBAND),
+      () -> MathUtil.applyDeadband(m_driverController.getRightX(),
+            OperatorConstants.RIGHT_X_DEADBAND),
+      m_driverController::getYButtonPressed,
+      m_driverController::getAButtonPressed,
+      m_driverController::getXButtonPressed,
+      m_driverController::getBButtonPressed);
+
+    // Applies deadbands and inverts controls because joysticks
+    // are back-right positive while robot
+    // controls are front-left positive
+    // left stick controls translation
+
+
+
+    
+    // right stick controls the desired angle NOT angular rotation
+    Command driveFieldOrientedDirectAngle = m_DriveSubsystem.driveCommand(
+        () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> m_driverController.getRightX(),
+        () -> m_driverController.getRightY()); 
+    // Applies deadbands and inverts controls because joysticks
+    // are back-right positive while robot
+    // controls are front-left positive
+    // left stick controls translation
+    // right stick controls the angular velocity of the robot
+    Command driveFieldOrientedAnglularVelocity = m_DriveSubsystem.driveCommand(
+        () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> m_driverController.getRawAxis(2));
+
+    Command driveFieldOrientedDirectAngleSim = m_DriveSubsystem.simDriveCommand(
+        () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> m_driverController.getRawAxis(2));
+
+    m_DriveSubsystem.setDefaultCommand(
+        !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
   }
 
   /**
@@ -50,7 +113,8 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+     new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
   }
 
   /**
