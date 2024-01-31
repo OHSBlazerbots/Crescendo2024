@@ -1,0 +1,42 @@
+<dashboard-tab
+    tab-name="TeleOperated"
+    slot="tab"
+    source-provider="NetworkTables"
+    selected=""
+>
+    <frc-label
+        text="main cam"
+        source-provider="NetworkTables"
+        style="width: 148.021px; height: 20px; transform: translate(603.333px, 187.333px);"
+    ></frc-label>
+    <frc-basic-fms-info
+        source-provider="NetworkTables"
+        style="width: 400.667px; height: 187.823px; transform: translate(112px, 3.2e-05px);"
+    ></frc-basic-fms-info>
+    <frc-accelerometer
+        source-provider="NetworkTables"
+        style="transform: translate(810.646px, 65.3125px); width: 344.656px; height: 83.3229px;"
+    ></frc-accelerometer>
+
+
+    <frc-label
+        text="Aim cam"
+        source-provider="NetworkTables"
+        style="width: 62.2292px; height: 20px; transform: translate(618.667px, 0px);"
+    ></frc-label>
+
+    <frc-camera-wrapper
+        source-provider="NetworkTables"
+        style="transform: translate(564.656px, 35.3125px); width: 145.344px; height: 103.323px;"
+        streams="[]"
+        background-color="black"
+        wait-image="./no-camera-stream.jpg"
+        crosshair-color="white"
+    ></frc-camera-wrapper><frc-camera-wrapper
+        source-provider="NetworkTables"
+        style="width: 626.646px; height: 354.667px; transform: translate(317.99px, 212.667px);"
+        streams="[]"
+        background-color="black"
+        wait-image="./no-camera-stream.jpg"
+        crosshair-color="white"
+    ></frc-camera-wrapper></dashboard-tab>
