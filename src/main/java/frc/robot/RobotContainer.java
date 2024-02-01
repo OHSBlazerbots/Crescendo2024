@@ -13,6 +13,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -23,6 +24,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.CameraSubsystem;
+
 
 
 /**
@@ -37,6 +40,7 @@ public class RobotContainer {
   // private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
+  private final CameraSubsystem m_robotCamera = new CameraSubsystem();
   XboxController m_driverController = new XboxController(IOConstants.kDriverControllerPort);
 
 
@@ -115,8 +119,9 @@ public class RobotContainer {
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
      new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
+    new JoystickButton(m_driverController, 6)
+     .onTrue(Commands.runOnce(() -> m_robotCamera.nextCameraSelection()));
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
