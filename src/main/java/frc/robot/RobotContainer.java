@@ -59,12 +59,12 @@ public class RobotContainer {
 
     m_driverController
       .povLeft()
-      .onTrue(Commands.runOnce(() -> m_robotClaw.setShooterSpeed(1)))
-      .onFalse(Commands.runOnce(() -> m_robotClaw.setShooterSpeed(0)));
+      .onTrue(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(1)))
+      .onFalse(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(0)));
     m_driverController
       .povRight()
-      .onTrue(Commands.runOnce(() -> m_robotClaw.setShooterSpeed(-1)))
-      .onFalse(Commands.runOnce(() -> m_robotClaw.setShooterSpeed(0)));
+      .onTrue(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(-1)))
+      .onFalse(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(0)));
   }
 
   /**
