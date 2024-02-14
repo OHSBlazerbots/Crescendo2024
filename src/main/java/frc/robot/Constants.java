@@ -27,11 +27,11 @@ public final class Constants {
     public static final double TURN_CONSTANT    = 6;
   }
   public static final class ShooterConstants {
-    public static final int kShooterMotorPort = 29;
+    public static final int kShooterMotorPort = 9;
+    public static final int kShooterMotorPort2 = 14;
 
-    public static final Gains kShooterGains = new Gains(0.15, 0.0, 0.0, 0.0, 200, 1.00);
-    // public static final int kUpeprEncoderRotationsAtMaxHeight = -2004016; // TODO: determine emperically
-    // public static final int UpperWenchSafeWenchPosition = -332606;
+
+    // public static final Gains kShooterGains = new Gains(0.15, 0.0, 0.0, 0.0, 200, 1.00);
   }
 
   public static final class DriveConstants {
@@ -49,6 +49,11 @@ public final class Constants {
     public final static int PID_TURN = 1;
     public final static int SLOT_1 = 1;
     public final static int kSlot_Turning = SLOT_1;
+  }
+  public static final class ClimbingConstants{
+     public static final int kRightClimbingMotorPort = 20;
+      public static final int kLeftClimbingMotorPort = 20;
+
   }
   public static final class IOConstants {
     public static final int kDriverControllerPort = 0;
