@@ -15,8 +15,8 @@
     "canbus": null
   },
   "conversionFactor": {
-    "angle": 90,
-    "drive": 0.0471238898
+    "angle": 360,
+    "drive": 0.04712388980384689
 
   },
   "encoder": {
@@ -26,7 +26,7 @@
   },
   "inverted": {
     "drive": false,
-    "angle": true
+    "angle": false
   },
-  "absoluteEncoderInverted": false
+  "absoluteEncoderInverted": true
 }

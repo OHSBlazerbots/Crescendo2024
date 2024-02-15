@@ -1,33 +1,5 @@
 //code from YAGSL examples
-// package frc.robot.subsystems;
-// import java.io.File;
-// import java.io.IOException;
-
-// import edu.wpi.first.wpilibj.Filesystem;
-// import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import swervelib.parser.SwerveParser;
-// import swervelib.SwerveDrive;
-// import edu.wpi.first.math.util.Units;
-
-
-// public class DriveSubsystem extends SubsystemBase{
-// double maximumSpeed = Units.feetToMeters(4.5);
-// File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve");
-// public DriveSubsystem(){
-//     try {
-//         SwerveDrive swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
-//     } catch (IOException e) {
-//         // TODO: handle exception
-//     }
-// }
-// }
 package frc.robot.subsystems;
-
-// import com.pathplanner.lib.PathConstraints;
-// import com.pathplanner.lib.PathPlanner;
-// import com.pathplanner.lib.PathPlannerTrajectory;
-// import com.pathplanner.lib.auto.PIDConstants;
-// import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -88,7 +60,7 @@ public class DriveSubsystem extends SubsystemBase
     //  The gear ratio is 6.75 motor revolutions per wheel rotation.
     //  The encoder resolution per motor revolution is 1 per motor revolution.
     double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75, 1);
-    System.out.println("\"conversionFactor\": {");
+    System.out.println("\conversionFactor\: {");
     System.out.println("\t\"angle\": " + angleConversionFactor + ",");
     System.out.println("\t\"drive\": " + driveConversionFactor);
     System.out.println("}");
@@ -279,11 +251,7 @@ public class DriveSubsystem extends SubsystemBase
   {
     xInput = Math.pow(xInput, 3);
     yInput = Math.pow(yInput, 3);
-    return swerveDrive.swerveController.getTargetSpeeds(xInput,
-                                                        yInput,
-                                                        angle.getRadians(),
-                                                        getHeading().getRadians(),
-                                                        maximumSpeed);
+    return swerveDrive.swerveController.getTargetSpeeds(xInput, yInput, angle.getRadians(), getHeading().getRadians(), maximumSpeed);
   }
 
   /**
