@@ -7,12 +7,12 @@ package frc.robot;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.AbsoluteDrive;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -33,14 +33,13 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ShooterSubsystem m_robotShooter = new ShooterSubsystem();
+  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
 
-  // private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
-  XboxController m_driverController = new XboxController(IOConstants.kDriverControllerPort);
-  XboxController m_CoDriverController = new XboxController(IOConstants.kCoDriverControllerPort);
+  XboxController m_driverController = new XboxController(0);
+  XboxController m_CoDriverController = new XboxController(1);
 
 
 
@@ -48,14 +47,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    // m_DriveSubsystem.setDefaultCommand(
-    //    // A split-stick arcade command, with forward/backward controlled by the left
-    //    // hand, and turning controlled by the right.
-    //     Commands.run(
-    //        () -> m_DriveSubsystem.AbsoluteDrive(
-    //         -m_driverController.getLeftY(),
-    //          m_driverController.getLeftX()),
-    //        m_DriveSubsystem));
     AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
       () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
           OperatorConstants.LEFT_Y_DEADBAND),
@@ -110,30 +101,10 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+  private void configureBindings() {  
+    new JoystickButton(m_driverController, 2).onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)));
+    new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-                
-    // m_CoDriverController // This spins the shooter
-    //   .b()
-    //   .onTrue(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(0.1)))
-    //   .onFalse(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(0)));
-
-    m_driverController
-      .povLeft()
-      .onTrue(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(1)))
-      .onFalse(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(0)));
-    m_driverController
-      .povRight()
-      .onTrue(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(-1)))
-      .onFalse(Commands.runOnce(() -> m_robotShooter.setShooterSpeed(0)));
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-     new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
   }
 
   /**
@@ -141,8 +112,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+  // public Command getAutonomousCommand() {
+  // //   // An example command will be run in autonomous
+  //   return Autos.exampleAuto(m_DriveSubsystem);
+  // }
 }

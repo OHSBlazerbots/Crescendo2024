@@ -1,7 +1,7 @@
 {
   "location": {
-    "front": 12,
-    "left": -14
+    "front": -13,
+    "left": 11
   },
   "absoluteEncoderOffset": 0.376,
   "drive": {
@@ -21,7 +21,7 @@
   },
   "encoder": {
     "type": "attached",
-    "id": 8,
+    "id": 4,
     "canbus": null
   },
   "inverted": {
