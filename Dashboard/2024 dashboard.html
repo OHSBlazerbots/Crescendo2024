@@ -2,7 +2,6 @@
     tab-name="TeleOperated"
     slot="tab"
     source-provider="NetworkTables"
-    selected=""
 >
     <frc-label
         text="main cam"
@@ -11,7 +10,7 @@
     ></frc-label>
     <frc-basic-fms-info
         source-provider="NetworkTables"
-        style="width: 400.667px; height: 187.823px; transform: translate(112px, 3.2e-05px);"
+        style="width: 400.667px; height: 187.823px; transform: translate(131.2px, 3.2e-05px);"
     ></frc-basic-fms-info>
     <frc-accelerometer
         source-provider="NetworkTables"
@@ -42,4 +41,53 @@
         crosshair-color="white"
         source-key="/CameraPublisher/USB Camera 1"
         hide-crosshair=""
-    ></frc-camera-wrapper></dashboard-tab>
+        background-color="black"
+    ></frc-camera-wrapper><frc-swerve-drivebase
+        source-provider="NetworkTables"
+        style="width: 235.963px; height: 391px; transform: translate(55.1875px, 205px);"
+        source-key="/SmartDashboard/swerve"
+        wheellocations="[2.5,2,2.5,-2,-2.5,2,-2.5,-2]"
+        measuredstates="[0,0,0,0,0,0,0,0]"
+        desiredstates="[0,0,0,0,0,0,0,0]"
+        sizeleftright="4"
+        sizefrontback="5"
+    ></frc-swerve-drivebase><frc-gyro
+        source-provider="NetworkTables"
+        style="transform: translate(1144px, 230.4px);"
+        source-key="/SmartDashboard/Adjusted IMU Yaw"
+    ></frc-gyro>
+
+   
+</dashboard-tab>
+
+
+<dashboard-tab
+    tab-name="Tab 2"
+    slot="tab"
+    source-provider="NetworkTables"
+    selected=""
+> <frc-gyro
+source-provider="NetworkTables"
+style="transform: translate(1144px, 230.4px);"
+source-key="/SmartDashboard/Adjusted IMU Yaw"
+></frc-gyro>
+
+<frc-gyro
+source-provider="NetworkTables"
+style="transform: translate(333.6px, 200.8px);"
+source-key="/SmartDashboard/Adjusted IMU Yaw"
+></frc-gyro>
+
+<frc-gyro
+source-provider="NetworkTables"
+style="transform: translate(755.2px, 352.8px);"
+source-key="/SmartDashboard/Adjusted IMU Yaw"
+></frc-gyro>
+
+<frc-gyro
+source-provider="NetworkTables"
+style="transform: translate(786.4px, 108px);"
+source-key="/SmartDashboard/Adjusted IMU Yaw"
+></frc-gyro>aaa
+
+</dashboard-tab>
