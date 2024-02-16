@@ -102,7 +102,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {  
-    new JoystickButton(m_driverController, 2).onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)));
+    new JoystickButton(m_driverController, 2)
+      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
+      .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
     new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
 
   }
