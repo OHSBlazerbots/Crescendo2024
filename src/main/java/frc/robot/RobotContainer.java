@@ -5,10 +5,11 @@
 package frc.robot;
 
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.AbsoluteDrive;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,7 +36,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-
+  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
   XboxController m_driverController = new XboxController(0);
@@ -105,6 +106,12 @@ public class RobotContainer {
     new JoystickButton(m_driverController, 2)
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
       .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
+    new JoystickButton(m_driverController, 3)
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0.5)))
+      .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
+    new JoystickButton(m_driverController, 0)
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(-0.5)))
+      .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
     new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
 
   }
