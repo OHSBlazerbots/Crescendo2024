@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -19,19 +20,24 @@ public class IntakeSubsystem extends SubsystemBase {
     // private static final SparkPIDController m_shooterController = new SparkPIDController(
     //      ShooterConstants.kSho"1oterGains,
     //      ShooteIrConstants.kShooterMotorPort);
-    private CANSparkMax m_leadIntakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
-    private CANSparkMax m_secondaryIntakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort2, MotorType.kBrushless);
-    private SparkPIDController m_IntakeController = m_leadIntakeMotor.getPIDController();
+    private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
+    private CANSparkMax m_swivelMotor = new CANSparkMax(IntakeConstants.kSwivelMotorPort, MotorType.kBrushless);
+    private SparkPIDController m_IntakeController = m_intakeMotor.getPIDController();
+    private SparkPIDController m_SwivelController = m_swivelMotor.getPIDController();
+
 
     public motorController intake = new motorController(m_IntakeController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
+    public motorController swivel = new motorController(m_SwivelController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
+
 
     
 
 public IntakeSubsystem() {
     // m_shooterController.zeroSensors();
     // m_shooterController.setPositionZero();
-    m_leadIntakeMotor.restoreFactoryDefaults();
-    m_secondaryIntakeMotor.restoreFactoryDefaults();
+    m_intakeMotor.restoreFactoryDefaults();
+    m_swivelMotor.restoreFactoryDefaults();
+    m_swivelMotor.setIdleMode(IdleMode.kBrake);
 
      // Current limiting
      /*int TIMEOUT_MS = 10;
@@ -45,20 +51,20 @@ public void setIntakeSpeed(double speed) {
     // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
     // System.out.println("speed=" + speed);
     // System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
-    m_leadIntakeMotor.set(speed);
+    m_intakeMotor.set(speed);
     writeMetricsToSmartDashboard();
  }
- public void setIntakeArmSpeed(double speed) {
+ public void setSwivelSpeed(double speed) {
     // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
     // System.out.println("speed=" + speed);
     // System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
-    m_secondaryIntakeMotor.set(speed);
+    m_swivelMotor.set(speed);
     writeMetricsToSmartDashboard();
  }
  public void writeMetricsToSmartDashboard() {
     intake.writeMetricsToSmartDashboard();
-    SmartDashboard.putNumber("Motor set output", m_leadIntakeMotor.get());
-    SmartDashboard.putNumber("Motor set output", m_secondaryIntakeMotor.get());
+    SmartDashboard.putNumber("Motor set output", m_intakeMotor.get());
+    SmartDashboard.putNumber("Motor set output", m_swivelMotor.get());
  }
 
 }

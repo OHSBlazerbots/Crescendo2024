@@ -39,26 +39,26 @@ public class RobotContainer {
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
-  XboxController m_driverController = new XboxController(0);
-  XboxController m_CoDriverController = new XboxController(1);
 
+   CommandXboxController m_driverController = new CommandXboxController(0);
+    CommandXboxController m_CoDriverController = new CommandXboxController(1);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
-      () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
-          OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(m_driverController.getLeftX(),
-            OperatorConstants.LEFT_X_DEADBAND),
-      () -> MathUtil.applyDeadband(m_driverController.getRightX(),
-            OperatorConstants.RIGHT_X_DEADBAND),
-      m_driverController::getYButtonPressed,
-      m_driverController::getAButtonPressed,
-      m_driverController::getXButtonPressed,
-      m_driverController::getBButtonPressed);
+    // AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
+    //   () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
+    //       OperatorConstants.LEFT_Y_DEADBAND),
+    //   () -> MathUtil.applyDeadband(m_driverController.getLeftX(),
+    //         OperatorConstants.LEFT_X_DEADBAND),
+    //   () -> MathUtil.applyDeadband(m_driverController.getRightX(),
+    //         OperatorConstants.RIGHT_X_DEADBAND),
+    //   m_driverController::getYButtonPressed,
+    //   m_driverController::getAButtonPressed,
+    //   m_driverController::getXButtonPressed,
+    //   m_driverController::getBButtonPressed);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -103,16 +103,30 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {  
-    new JoystickButton(m_driverController, 2)
+
+    m_driverController     
+      .rightBumper() 
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
       .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
-    new JoystickButton(m_driverController, 3)
+    m_driverController
+      .y()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0.5)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
-    new JoystickButton(m_driverController, 0)
+    m_driverController
+      .a()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(-0.5)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
-    new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
+    m_driverController
+      .x()
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.5)))
+      .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
+    m_driverController
+      .b()
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.5)))
+      .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
+    m_driverController
+      .back()
+      .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
 
   }
 
