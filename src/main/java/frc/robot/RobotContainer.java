@@ -125,6 +125,12 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.5)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_driverController
+      .rightTrigger()
+      .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));
+     m_driverController
+      .leftTrigger()
+      .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
+    m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
 

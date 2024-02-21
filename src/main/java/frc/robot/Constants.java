@@ -55,9 +55,13 @@ public final class Constants {
       public static final int kLeftClimbingMotorPort = 20;
 
   }
+  public static final class IntakeConstants{
+    public static final int kIntakeMotorPort = 20;
+    public static final int kSwivelMotorPort = 20;
+  }
   public static final class IOConstants {
     public static final int kDriverControllerPort = 0;
-    // public static final int kCoDriverControllerPort = 1;
+    public static final int kCoDriverControllerPort = 1;
 
     // Buttons are 1-indexed
     public static final int kDriverButtonA = 1;

@@ -22,6 +22,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //      ShooteIrConstants.kShooterMotorPort);
     private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
     private CANSparkMax m_swivelMotor = new CANSparkMax(IntakeConstants.kSwivelMotorPort, MotorType.kBrushless);
+    private RelativeEncoder m_swivelEncoder = m_swivelMotor.getEncoder();
     private SparkPIDController m_IntakeController = m_intakeMotor.getPIDController();
     private SparkPIDController m_SwivelController = m_swivelMotor.getPIDController();
 
@@ -33,8 +34,6 @@ public class IntakeSubsystem extends SubsystemBase {
     
 
 public IntakeSubsystem() {
-    // m_shooterController.zeroSensors();
-    // m_shooterController.setPositionZero();
     m_intakeMotor.restoreFactoryDefaults();
     m_swivelMotor.restoreFactoryDefaults();
     m_swivelMotor.setIdleMode(IdleMode.kBrake);
@@ -61,10 +60,16 @@ public void setIntakeSpeed(double speed) {
     m_swivelMotor.set(speed);
     writeMetricsToSmartDashboard();
  }
+ public void setSwivelPosition(double rotations){
+    m_SwivelController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+    writeMetricsToSmartDashboard();
+ }
+
  public void writeMetricsToSmartDashboard() {
     intake.writeMetricsToSmartDashboard();
     SmartDashboard.putNumber("Motor set output", m_intakeMotor.get());
     SmartDashboard.putNumber("Motor set output", m_swivelMotor.get());
+    SmartDashboard.putNumber("ProcessVariable", m_swivelEncoder.getPosition());
  }
 
 }
