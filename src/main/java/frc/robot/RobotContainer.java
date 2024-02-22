@@ -23,6 +23,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.CameraSubsystem;
+
 
 
 /**
@@ -38,6 +40,7 @@ public class RobotContainer {
 
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
+  private final CameraSubsystem m_robotCamera = new CameraSubsystem();
   XboxController m_driverController = new XboxController(0);
   XboxController m_CoDriverController = new XboxController(1);
 
@@ -106,9 +109,9 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
       .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
     new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
-
+    new JoystickButton(m_driverController, 6)
+     .onTrue(Commands.runOnce(() -> m_robotCamera.nextCameraSelection()));
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
