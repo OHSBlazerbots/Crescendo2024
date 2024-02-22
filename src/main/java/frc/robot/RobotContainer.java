@@ -109,11 +109,6 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
       .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
     new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-     new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
     new JoystickButton(m_driverController, 6)
      .onTrue(Commands.runOnce(() -> m_robotCamera.nextCameraSelection()));
   }
