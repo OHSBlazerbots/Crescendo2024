@@ -26,6 +26,14 @@ public final class Constants {
     public static final double RIGHT_X_DEADBAND = 0.01;
     public static final double TURN_CONSTANT    = 6;
   }
+  public static final class ShooterConstants {
+    public static final int kShooterMotorPort = 9;
+    public static final int kShooterMotorPort2 = 14;
+
+
+    // public static final Gains kShooterGains = new Gains(0.15, 0.0, 0.0, 0.0, 200, 1.00);
+  }
+
   public static final class DriveConstants {
     public static final int kLeftMotorPrimaryPort = 4;
     public static final int kLeftMotorSecondaryPort = 17;
@@ -42,6 +50,7 @@ public final class Constants {
     public final static int SLOT_1 = 1;
     public final static int kSlot_Turning = SLOT_1;
   }
+ 
   public static final class IOConstants {
     public static final int kDriverControllerPort = 0;
     // public static final int kCoDriverControllerPort = 1;

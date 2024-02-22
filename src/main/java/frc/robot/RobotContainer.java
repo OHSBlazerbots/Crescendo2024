@@ -7,9 +7,8 @@ package frc.robot;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.AbsoluteDrive;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,26 +35,21 @@ import frc.robot.subsystems.CameraSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  // private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
+  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
   private final CameraSubsystem m_robotCamera = new CameraSubsystem();
-  XboxController m_driverController = new XboxController(IOConstants.kDriverControllerPort);
+  XboxController m_driverController = new XboxController(0);
+  XboxController m_CoDriverController = new XboxController(1);
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    // m_DriveSubsystem.setDefaultCommand(
-    //    // A split-stick arcade command, with forward/backward controlled by the left
-    //    // hand, and turning controlled by the right.
-    //     Commands.run(
-    //        () -> m_DriveSubsystem.AbsoluteDrive(
-    //         -m_driverController.getLeftY(),
-    //          m_driverController.getLeftX()),
-    //        m_DriveSubsystem));
     AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
       () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
           OperatorConstants.LEFT_Y_DEADBAND),
@@ -110,10 +104,11 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+  private void configureBindings() {  
+    new JoystickButton(m_driverController, 2)
+      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
+      .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
+    new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
@@ -128,7 +123,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+  //   // An example command will be run in autonomous
+    return Autos.exampleAuto(m_DriveSubsystem);
   }
 }

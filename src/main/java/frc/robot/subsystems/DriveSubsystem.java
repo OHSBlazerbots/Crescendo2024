@@ -170,6 +170,15 @@ public class DriveSubsystem extends SubsystemBase
   {
   }
 
+  public Command exampleMethodCommand() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          /* one-time action goes here */
+        });
+  }
+
   /**
    * Get the swerve drive kinematics object.
    *
