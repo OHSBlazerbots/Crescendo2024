@@ -19,14 +19,9 @@ public class CameraSubsystem extends SubsystemBase {
         ShooterCam = CameraServer.startAutomaticCapture(1); // 1 is placeholder
         cameraServer = CameraServer.getServer();
         allCameras = new UsbCamera[] { frontBumper,ShooterCam };
-    }
-
-    public void nextCameraSelection() {
-        currentCameraIndex += 1;
-        currentCameraIndex = currentCameraIndex % allCameras.length;
-        System.out.println("current camera index:" + currentCameraIndex);
-
-        UsbCamera currentCamera = allCameras[currentCameraIndex];
-        cameraServer.setSource(currentCamera);
+        frontBumper.setResolution(424, 240);
+        frontBumper.setFPS(30);
+        ShooterCam.setResolution(160, 120);
+        ShooterCam.setFPS(20);
     }
 }
