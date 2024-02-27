@@ -24,6 +24,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.CameraSubsystem;
+
 
 
 /**
@@ -40,6 +42,7 @@ public class RobotContainer {
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
 
+  private final CameraSubsystem m_robotCamera = new CameraSubsystem();
    CommandXboxController m_driverController = new CommandXboxController(0);
     CommandXboxController m_CoDriverController = new CommandXboxController(1);
 
@@ -133,8 +136,6 @@ public class RobotContainer {
     m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
-
-  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
