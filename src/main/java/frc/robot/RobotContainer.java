@@ -1,14 +1,11 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.AbsoluteDrive;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +22,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 
 
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -35,29 +33,29 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-
+  private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
-  XboxController m_driverController = new XboxController(0);
-  XboxController m_CoDriverController = new XboxController(1);
 
+   CommandXboxController m_driverController = new CommandXboxController(0);
+    CommandXboxController m_CoDriverController = new CommandXboxController(1);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
-      () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
-          OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(m_driverController.getLeftX(),
-            OperatorConstants.LEFT_X_DEADBAND),
-      () -> MathUtil.applyDeadband(m_driverController.getRightX(),
-            OperatorConstants.RIGHT_X_DEADBAND),
-      m_driverController::getYButtonPressed,
-      m_driverController::getAButtonPressed,
-      m_driverController::getXButtonPressed,
-      m_driverController::getBButtonPressed);
+    // AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
+    //   () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
+    //       OperatorConstants.LEFT_Y_DEADBAND),
+    //   () -> MathUtil.applyDeadband(m_driverController.getLeftX(),
+    //         OperatorConstants.LEFT_X_DEADBAND),
+    //   () -> MathUtil.applyDeadband(m_driverController.getRightX(),
+    //         OperatorConstants.RIGHT_X_DEADBAND),
+    //   m_driverController::getYButtonPressed,
+    //   m_driverController::getAButtonPressed,
+    //   m_driverController::getXButtonPressed,
+    //   m_driverController::getBButtonPressed);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -102,11 +100,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {  
-    new JoystickButton(m_driverController, 2)
-      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
-      .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
-    new JoystickButton(m_driverController, 1).onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
 
+    m_driverController     
+      .rightBumper() 
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.2)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
+    
+    m_driverController
+      .back()
+      .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
+
+    m_driverController     
+      .leftBumper() 
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.2)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
+    
   }
 
   /**
