@@ -1,0 +1,57 @@
+<dashboard-tab
+    tab-name="TeleOperated"
+    slot="tab"
+    selected=""
+    source-provider="NetworkTables"
+><frc-camera-wrapper
+        source-provider="NetworkTables"
+        style="width: 739.2px; height: 536.8px; transform: translate(0px, 0px);"
+        source-key="/CameraPublisher/USB Camera 0"
+        streams="[]"
+        background-color="black"
+        wait-image="./no-camera-stream.jpg"
+        crosshair-color="white"
+    ></frc-camera-wrapper><frc-camera-wrapper
+        source-provider="NetworkTables"
+        style="transform: translate(759.2px, 236px);"
+        source-key="/CameraPublisher/USB Camera 1"
+        streams="[]"
+        background-color="black"
+        wait-image="./no-camera-stream.jpg"
+        crosshair-color="white"
+    ></frc-camera-wrapper><frc-boolean-box
+        source-provider="NetworkTables"
+        style="width: 79.9875px; height: 77.6px; transform: translate(1003.2px, 152.8px);"
+        source-key="/SmartDashboard/Drive straight mode"
+    ></frc-boolean-box><vaadin-text-field
+        label="Straight Drive?"
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(794.4px, 151.2px); width: 192px; height: 70.6px;"
+        placeholder=""
+    ><input
+            slot="input"
+            type="text"
+            id="vaadin-text-field-128"
+            aria-labelledby="label-vaadin-text-field-128"
+            aria-describedby=""
+        ><label
+            slot="label"
+            id="label-vaadin-text-field-128"
+            for="vaadin-text-field-128"
+        >Straight Drive?</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-text-field-110"
+            hidden=""
+        ></div>
+    </vaadin-text-field><frc-number-bar
+        source-provider="NetworkTables"
+        style="transform: translate(792px, 27.2px);"
+        source-key="/SmartDashboard/Max Drive speed"
+        min="0"
+    ></frc-number-bar></dashboard-tab><dashboard-tab
+    slot="tab"
+    tab-name="Autonomous"
+    source-provider="NetworkTables"
+></dashboard-tab>
