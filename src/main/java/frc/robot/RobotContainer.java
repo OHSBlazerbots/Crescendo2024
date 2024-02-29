@@ -3,6 +3,8 @@ package frc.robot;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.AbsoluteDrive;
@@ -20,6 +22,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.CameraSubsystem;
+
 
 
 
@@ -34,11 +38,16 @@ public class RobotContainer {
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
+  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
 
-   CommandXboxController m_driverController = new CommandXboxController(0);
-    CommandXboxController m_CoDriverController = new CommandXboxController(1);
+
+  
+
+  private final CameraSubsystem m_robotCamera = new CameraSubsystem();
+  CommandXboxController m_driverController = new CommandXboxController(0);
+  CommandXboxController m_CoDriverController = new CommandXboxController(1);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -100,23 +109,49 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {  
-
-    m_driverController     
-      .rightBumper() 
+    
+     m_driverController     
+      .povRight() 
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0.2)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
+     m_driverController     
+      .povLeft() 
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.2)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
-    
+     m_driverController     
+      .rightBumper() 
+      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0.2)))
+      .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
+    m_driverController     
+      .leftBumper() 
+      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
+      .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
+    m_driverController
+      .y()
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0.5)))
+      .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
+    m_driverController
+      .a()
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(-0.5)))
+      .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
+    m_driverController
+      .x()
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.5)))
+      .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
+    m_driverController
+      .b()
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.5)))
+      .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
+    m_driverController
+      .rightTrigger()
+      .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));
+     m_driverController
+      .leftTrigger()
+      .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
     m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
-
-    m_driverController     
-      .leftBumper() 
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.2)))
-      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
-    
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

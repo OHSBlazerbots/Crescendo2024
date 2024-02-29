@@ -25,15 +25,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public motorController shooter = new motorController(m_shooterController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
 
-    
 
 public ShooterSubsystem() {
-    
-
-
-
-    // m_shooterController.zeroSensors();
-    // m_shooterController.setPositionZero();
     m_leadMotor.restoreFactoryDefaults();
     m_secondaryMotor.restoreFactoryDefaults();
 
@@ -48,7 +41,7 @@ public ShooterSubsystem() {
 public void setShooterSpeed(double speed) {
     // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
     System.out.println("speed=" + speed);
-    System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
+    System.out.println("dashboard=" + SmartDashboard.getNumber("Intake/Speed Output", 0));
     m_leadMotor.set(speed);
     m_secondaryMotor.set(-speed);
     writeMetricsToSmartDashboard();
