@@ -50,15 +50,18 @@ public final class Constants {
     public final static int SLOT_1 = 1;
     public final static int kSlot_Turning = SLOT_1;
   }
+  
   public static final class ClimbingConstants{
      public static final int kRightClimbingMotorPort = 20;
       public static final int kLeftClimbingMotorPort = 20;
 
   }
+
   public static final class IntakeConstants{
     public static final int kIntakeMotorPort = 20;
     public static final int kSwivelMotorPort = 20;
   }
+  
   public static final class IOConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kCoDriverControllerPort = 1;

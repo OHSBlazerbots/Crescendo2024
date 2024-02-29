@@ -25,7 +25,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public motorController shooter = new motorController(m_shooterController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
 
-    
 
 public ShooterSubsystem() {
     m_leadMotor.restoreFactoryDefaults();

@@ -1,86 +1,74 @@
-// package frc.robot.subsystems;
+package frc.robot.subsystems;
 
-// import frc.robot.Constants.ClimbingConstants;
-// import frc.robot.Constants.ShooterConstants;
-// // import frc.robot.subsystems.motor_controllers.PositionPidMotorController;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClimbingConstants;
+import frc.robot.subsystems.motorController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-// import com.revrobotics.RelativeEncoder;
-// import com.revrobotics.SparkPIDController;
-// import com.revrobotics.CANSparkMax;
-// import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
-// public class ClimbingSubsystem extends SubsystemBase {
-//     // private static final PositionPidMotorController m_climbingController = new PositionPidMotorController(
-//     //     ClimbingConstants.kClimbingGains,
-//     //     ClimbingConstants.kClimbingMotorPort);
-//     // private CANSparkMax m_leadClimbingMotor = new CANSparkMax(ClimbingConstants.kClimbingMotorPort, MotorType.kBrushless);
-//     // private CANSparkMax m_secondaryClimbingMotor = new CANSparkMax(ClimbingConstants.kClimbingMotorPort, MotorType.kBrushless);  
-//     private CANSparkMax m_rightMotor = new CANSparkMax(ClimbingConstants.kRightClimbingMotorPort, MotorType.kBrushless);
-//     private CANSparkMax m_leftMotor = new CANSparkMax(ClimbingConstants.kLeftClimbingMotorPort, MotorType.kBrushless);
-//     private CANSparkMax m_climbingMotor;
-//     private SparkPIDController m_RightClimbingController = m_rightMotor.getPIDController();
-//     private SparkPIDController m_LetfClimbingController = m_leftMotor.getPIDController();
-//     private RelativeEncoder m_climbingEncoder; 
-//     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;     
- 
-//     public ClimbingSubsystem() {
-//        m_climbingMotor = new CANSparkMax(deviceID, MotorType.kBrushless);
-//        m_climbingController = m_climbingMotor.getPIDController();
-//        m_climbingEncoder = m_climbingMotor.getEncoder();
-//        m_climbingMotor.restoreFactoryDefaults();
+public class ClimbingSubsystem extends SubsystemBase {
 
-//     //    m_climbingController.zeroSensors();
-//     //    m_climbingController.setPositionZero();
-//     //    m_leadClimbingMotor.restoreFactoryDefaults();
-//     //    m_secondaryClimbingMotor.restoreFactoryDefaults();
-//     }
- 
-//     public void setClimbingPosition(double targetPosition) {
-//        double motorPosition = targetPosition;
-//        m_leadMotor.setClimbingPosition(motorPosition); //placeholder code
-//        m_secondaryMotor.setClimbingPosition(motorPosition); //placeholder code
-//        writeMetricsToSmartDashboard();
-//     }
- 
-  
-//     public void setClimbingSpeed(double speed) {
-//        // TODO: test this logic!!!
-//        // stops elavator when it reaches the relative max height to prevent breakage
-//        // if (m_climbingController.getCurrentAbsolutePosition() >=
-//        // ClimbingConstants.kElevEncoderRotationsAtMaxHeight
-//        // && speed < 0) {
-//        // return;
-//        // }
-//        m_leadClimbingMotor.set(speed);
-//        m_secondaryClimbingMotor.set(speed);
-//        writeMetricsToSmartDashboard();
-//     }
- 
-//     public void writeMetricsToSmartDashboard() {
-//        SmartDashboard.putNumber("Climbing Relative Position", m_climbingController.getCurrentRelativePosition());
-//        SmartDashboard.putNumber("Climbing Absolute Position", m_climbingController.getCurrentAbsolutePosition());
-//        SmartDashboard.putNumber("Climbing Goal", m_climbingController.getTargetPosition());
-//        SmartDashboard.putNumber("Climbing Motor set output", m_climbingController.getOutput());
-//     }
- 
-//     public boolean isAtpositionA() {
- 
-//        return true;
-//        // need to finish implementation, hook up hall effect sensors
-//     }
- 
-//     public void zeroSensors() {
-//        m_climbingController.zeroSensors();
-//     }
- 
-//     public void setPositionZero() {
-//        m_climbingController.setPositionZero();
-//     }
- 
-//     public void setClimbingPosition() {
-//        Double targetPosition = SmartDashboard.getNumber("Climbing Goal", 10);
-//        setClimbingPosition(targetPosition);
-//     }
-//  }
+    // private static final SparkPIDController m_shooterController = new SparkPIDController(
+    //      ShooterConstants.kShooterGains,
+    //      ShooterConstants.kShooterMotorPort);
+    private CANSparkMax m_rightMotor = new CANSparkMax(ClimbingConstants.kRightClimbingMotorPort, MotorType.kBrushless);
+    private CANSparkMax m_leftMotor = new CANSparkMax(ClimbingConstants.kLeftClimbingMotorPort, MotorType.kBrushless);
+    private SparkPIDController m_climbingRightController = m_rightMotor.getPIDController();
+   private SparkPIDController m_climbingLeftController = m_leftMotor.getPIDController();
+
+
+    public motorController rightClimber = new motorController(m_climbingRightController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
+    public motorController leftClimber = new motorController(m_climbingLeftController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
+
+    
+
+public ClimbingSubsystem() {
+    
+
+
+
+    // m_shooterController.zeroSensors();
+    // m_shooterController.setPositionZero();
+    m_rightMotor.restoreFactoryDefaults();
+    m_leftMotor.restoreFactoryDefaults();
+    m_rightMotor.setIdleMode(IdleMode.kBrake);
+    m_leftMotor.setIdleMode(IdleMode.kBrake);
+
+     // Current limiting
+     /*int TIMEOUT_MS = 10;
+     m_Controller.getMotor().configPeakCurrentLimit(20, TIMEOUT_MS); // 20 Amps
+     m_shooterController.getMotor().configPeakCurrentDuration(200, TIMEOUT_MS); // 200ms
+     m_shooterController.getMotor().configContinuousCurrentLimit(20, TIMEOUT_MS); // 20 Amps
+     */
+}
+
+public void setClimberSpeed(double speed) {
+    // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
+   //  System.out.println("speed=" + speed);
+   //  System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
+    m_rightMotor.set(speed);
+    m_leftMotor.set(speed);
+    writeMetricsToSmartDashboard();
+ }
+
+ public void setClimberPosition(double rotations){
+    m_climbingRightController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+    m_climbingLeftController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+    writeMetricsToSmartDashboard();
+ }
+
+
+ public void writeMetricsToSmartDashboard() {
+    rightClimber.writeMetricsToSmartDashboard();
+    leftClimber.writeMetricsToSmartDashboard();
+    SmartDashboard.putNumber("Motor set output", m_rightMotor.get());
+    SmartDashboard.putNumber("Motor set output", m_leftMotor.get());
+ }
+
+}
+
