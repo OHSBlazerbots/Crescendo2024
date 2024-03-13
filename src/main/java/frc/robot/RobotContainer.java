@@ -6,7 +6,8 @@ import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
+import frc.robot.commands.ShootingAuto;
+import frc.robot.commands.DriveAuto;
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.Constants.IOConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +22,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.CameraSubsystem;
 
 
@@ -47,6 +50,11 @@ public class RobotContainer {
   private final CameraSubsystem m_robotCamera = new CameraSubsystem();
   CommandXboxController m_driverController = new CommandXboxController(0);
   CommandXboxController m_CoDriverController = new CommandXboxController(1);
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private ShootingAuto m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 5);
+  private DriveAuto m_DriveAuto = new DriveAuto(m_DriveSubsystem, 0);
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -96,6 +104,11 @@ public class RobotContainer {
 
     m_DriveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+
+    m_chooser.addOption("Shooting auto", m_shooterAuto);
+    m_chooser.addOption("Drive auto", m_DriveAuto);
+    SmartDashboard.putData("auto chooser", m_chooser);
+
   }
 
   /**
@@ -111,35 +124,33 @@ public class RobotContainer {
     
      m_driverController     
       .povRight() 
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0.2)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0.8)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
      m_driverController     
       .povLeft() 
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.2)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.8)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
      m_driverController     
       .rightBumper() 
-      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0.2)))
-      .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
+      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
     m_driverController     
       .leftBumper() 
-      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.2)))
-      .onFalse(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
+      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-1)));
     m_driverController
       .y()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0.5)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
     m_driverController
       .a()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(-0.5)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(-1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
     m_driverController
       .x()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.5)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_driverController
       .b()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.5)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_driverController
       .rightTrigger()
@@ -159,6 +170,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.Autos(m_DriveSubsystem,3.0);
-  }
+    // return m_chooser.getSelected();
+    // return m_shooterAuto;
+    return m_chooser.getSelected();
+}
 }

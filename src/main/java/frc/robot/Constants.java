@@ -27,8 +27,8 @@ public final class Constants {
     public static final double TURN_CONSTANT    = 6;
   }
   public static final class ShooterConstants {
-    public static final int kShooterMotorPort = 9;
-    public static final int kShooterMotorPort2 = 14;
+    public static final int kShooterMotorPort = 10;
+    public static final int kShooterMotorPort2 = 12;
 
 
     // public static final Gains kShooterGains = new Gains(0.15, 0.0, 0.0, 0.0, 200, 1.00);
@@ -52,15 +52,15 @@ public final class Constants {
   }
   
   public static final class ClimbingConstants{
-     public static final int kRightClimbingMotorPort = 20;
-      public static final int kLeftClimbingMotorPort = 20;
+     public static final int kRightClimbingMotorPort = 11;
+      public static final int kLeftClimbingMotorPort = 14;
 
   }
 
   public static final class IntakeConstants{
-    public static final int kIntakeMotorPort = 20;
-    public static final int kSwivelMotorPort = 20;
-    public static final int kLimitSwitchPort = 20;
+    public static final int kIntakeMotorPort = 9;
+    public static final int kSwivelMotorPort = 13;
+    // public static final int kLimitSwitchPort = 20;
   }
   
   public static final class AutoConstants{
