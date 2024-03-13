@@ -60,8 +60,13 @@ public final class Constants {
   public static final class IntakeConstants{
     public static final int kIntakeMotorPort = 20;
     public static final int kSwivelMotorPort = 20;
+    public static final int kLimitSwitchPort = 20;
   }
   
+  public static final class AutoConstants{
+    public static final int kDriveSpeed = 1;
+  }
+
   public static final class IOConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kCoDriverControllerPort = 1;

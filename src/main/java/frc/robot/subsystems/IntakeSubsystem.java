@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.motorController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,6 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //      ShooteIrConstants.kShooterMotorPort);
     private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
     private CANSparkMax m_swivelMotor = new CANSparkMax(IntakeConstants.kSwivelMotorPort, MotorType.kBrushless);
+    private final DigitalInput m_IntakeLimitSwitch = new DigitalInput(IntakeConstants.kLimitSwitchPort);
     private RelativeEncoder m_swivelEncoder = m_swivelMotor.getEncoder();
     private SparkPIDController m_IntakeController = m_intakeMotor.getPIDController();
     private SparkPIDController m_SwivelController = m_swivelMotor.getPIDController();
@@ -46,11 +49,20 @@ public IntakeSubsystem() {
      */
 }
 
+public boolean getIntakeHasNote() {
+   // NOTE: this is intentionally inverted, because the limit switch is normally
+   // closed
+   return !m_IntakeLimitSwitch.get();
+ }
+
 public void setIntakeSpeed(double speed) {
     // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
     // System.out.println("speed=" + speed);
     // System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
     m_intakeMotor.set(speed);
+    if(getIntakeHasNote() == true){
+      m_intakeMotor.set(0);
+    }
     writeMetricsToSmartDashboard();
  }
  public void setSwivelSpeed(double speed) {
@@ -64,6 +76,8 @@ public void setIntakeSpeed(double speed) {
     m_SwivelController.setReference(rotations, CANSparkMax.ControlType.kPosition);
     writeMetricsToSmartDashboard();
  }
+
+
 
  public void writeMetricsToSmartDashboard() {
     intake.writeMetricsToSmartDashboard();

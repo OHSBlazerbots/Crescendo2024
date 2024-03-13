@@ -9,7 +9,6 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.Constants.IOConstants;
-import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -151,14 +150,15 @@ public class RobotContainer {
     m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
+  }
   
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
+   * Use this to pass the autonomous command to tgihe main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-  //   // An example command will be run in autonomous
-    return Autos.exampleAuto(m_DriveSubsystem);
+    // An example command will be run in autonomous
+    return Autos.Autos(m_DriveSubsystem,3.0);
   }
 }
