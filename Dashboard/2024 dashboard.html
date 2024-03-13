@@ -2,6 +2,7 @@
     tab-name="TeleOperated"
     slot="tab"
     source-provider="NetworkTables"
+    selected=""
 >
     <frc-label
         text="main cam"
@@ -58,11 +59,15 @@
     ></frc-gyro>
 
 
-</dashboard-tab><dashboard-tab
+    <frc-sendable-chooser
+        source-provider="NetworkTables"
+        style="width: 220px; height: 69.8px; transform: translate(1176px, 45.6px);"
+        source-key="auto chooser"
+        options="[]"
+    ></frc-sendable-chooser></dashboard-tab><dashboard-tab
     tab-name="Tab 2"
     slot="tab"
     source-provider="NetworkTables"
-    selected=""
 > <frc-gyro
         source-provider="NetworkTables"
         style="transform: translate(471.988px, 22.4125px); width: 268.8px; height: 297.6px;"
