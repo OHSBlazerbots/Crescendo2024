@@ -122,43 +122,43 @@ public class RobotContainer {
    */
   private void configureBindings() {  
     
-     m_driverController     
+     m_CoDriverController     
       .povRight() 
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0.8)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
-     m_driverController     
+     m_CoDriverController     
       .povLeft() 
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.8)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
-     m_driverController     
+     m_CoDriverController     
       .rightBumper() 
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
-    m_driverController     
+    m_CoDriverController     
       .leftBumper() 
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-1)));
-    m_driverController
+    m_CoDriverController
       .y()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
-    m_driverController
+    m_CoDriverController
       .a()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(-1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
-    m_driverController
+    m_CoDriverController
       .x()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
-    m_driverController
+    m_CoDriverController
       .b()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
-    m_driverController
+    m_CoDriverController
       .rightTrigger()
       .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));
-     m_driverController
+     m_CoDriverController
       .leftTrigger()
       .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
-    m_driverController
+    m_CoDriverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
   }
