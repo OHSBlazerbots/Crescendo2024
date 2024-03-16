@@ -53,7 +53,7 @@ public class RobotContainer {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   private ShootingAuto m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 5);
-  private DriveAuto m_DriveAuto = new DriveAuto(m_DriveSubsystem, 0);
+  private DriveAuto m_DriveAuto = new DriveAuto(m_DriveSubsystem, 3);
 
 
 
@@ -107,7 +107,7 @@ public class RobotContainer {
 
     m_chooser.addOption("Shooting auto", m_shooterAuto);
     m_chooser.addOption("Drive auto", m_DriveAuto);
-    SmartDashboard.putData("auto chooser", m_chooser);
+    SmartDashboard.putData(m_chooser);
 
   }
 
@@ -122,43 +122,43 @@ public class RobotContainer {
    */
   private void configureBindings() {  
     
-     m_driverController     
+     m_CoDriverController     
       .povRight() 
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0.8)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
-     m_driverController     
+     m_CoDriverController     
       .povLeft() 
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.8)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
-     m_driverController     
+     m_CoDriverController     
       .rightBumper() 
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
-    m_driverController     
+    m_CoDriverController     
       .leftBumper() 
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-1)));
-    m_driverController
+    m_CoDriverController
       .y()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
-    m_driverController
+    m_CoDriverController
       .a()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(-1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
-    m_driverController
+    m_CoDriverController
       .x()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
-    m_driverController
+    m_CoDriverController
       .b()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.1)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
-    m_driverController
+    m_CoDriverController
       .rightTrigger()
       .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));
-     m_driverController
+     m_CoDriverController
       .leftTrigger()
       .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
-    m_driverController
+    m_CoDriverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
   }
@@ -171,7 +171,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_chooser.getSelected();
-    // return m_shooterAuto;
-    return m_chooser.getSelected();
+    return m_shooterAuto;
+    // return m_chooser.getSelected();
+    // return m_DriveAuto;
 }
 }
