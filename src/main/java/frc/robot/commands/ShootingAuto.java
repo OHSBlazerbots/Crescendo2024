@@ -50,11 +50,12 @@ public class ShootingAuto extends Command{
   @Override
   public void execute() {
       // m_driver.driveCommand(() ->0,() ->1,() ->0);// drive straight at half
-      if(timer.get() <= 1){
+      if(timer.get() <= 0.27){
         m_intake.setIntakeSpeed(1);
-      }else if(timer.get() <= 2){
+        m_shooter.setShooterSpeed(0.05);
+      }else if(timer.get() <= 1){
         m_intake.setIntakeSpeed(0);  
-        // m_shooter.setShooterSpeed(-1);
+        m_shooter.setShooterSpeed(-1);
       }else {
         m_intake.setIntakeSpeed(-1);
       }
@@ -64,6 +65,8 @@ public class ShootingAuto extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intake.setIntakeSpeed(0);
+    m_shooter.setShooterSpeed(0);
   }
 
   // Returns true when the command should end.

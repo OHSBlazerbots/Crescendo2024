@@ -52,14 +52,18 @@ public class RobotContainer {
   CommandXboxController m_CoDriverController = new CommandXboxController(1);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private ShootingAuto m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 5);
-  private DriveAuto m_DriveAuto = new DriveAuto(m_DriveSubsystem, 3);
+  private ShootingAuto m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 4);
+  private DriveAuto m_DriveAuto = new DriveAuto(m_DriveSubsystem, 0.5);
 
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    m_ClimbingSubsystem.setClimberSpeed(0);
+    m_IntakeSubsystem.setIntakeSpeed(0);
+    m_IntakeSubsystem.setSwivelSpeed(0);
+    m_ShooterSubsystem.setShooterSpeed(0);
     configureBindings();
     // AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
     //   () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
@@ -83,8 +87,8 @@ public class RobotContainer {
     
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle = m_DriveSubsystem.driveCommand(
-        () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(-m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> m_driverController.getRightX(),
         () -> m_driverController.getRightY()); 
     // Applies deadbands and inverts controls because joysticks
@@ -130,6 +134,9 @@ public class RobotContainer {
       .povLeft() 
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.8)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
+    m_CoDriverController     
+      .povUp() 
+      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.25)));
      m_CoDriverController     
       .rightBumper() 
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
@@ -158,7 +165,7 @@ public class RobotContainer {
      m_CoDriverController
       .leftTrigger()
       .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
-    m_CoDriverController
+    m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
   }
@@ -171,8 +178,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_chooser.getSelected();
-    return m_shooterAuto;
+    // return m_shooterAuto;
     // return m_chooser.getSelected();
-    // return m_DriveAuto;
+    return m_DriveAuto;
 }
 }

@@ -22,10 +22,10 @@ public class DriveAuto extends CommandBase{
     private final double duration;
 
     public DriveAuto(DriveSubsystem driver, double time) {
-    m_driver = driver;
-    duration = time;
-    addRequirements(m_driver);
-    timer = new Timer();
+        m_driver = driver;
+        duration = time;
+        addRequirements(m_driver);
+        timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
@@ -40,7 +40,7 @@ public class DriveAuto extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_driver.driveCommand(() ->0,() ->1,() ->0);
+      m_driver.driveCommand(() ->-1,() ->0,() ->0, () ->0);
   }
 
   // Called once the command ends or is interrupted.
