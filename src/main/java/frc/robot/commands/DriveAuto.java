@@ -7,6 +7,7 @@ import java.time.Duration;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -22,10 +23,10 @@ public class DriveAuto extends CommandBase{
     private final double duration;
 
     public DriveAuto(DriveSubsystem driver, double time) {
-    m_driver = driver;
-    duration = time;
-    addRequirements(m_driver);
-    timer = new Timer();
+        m_driver = driver;
+        duration = time;
+        addRequirements(m_driver);
+        timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
@@ -40,7 +41,10 @@ public class DriveAuto extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_driver.driveCommand(() ->0,() ->1,() ->0);
+    //   Command autoDrive = m_driver.driveCommand(() ->-1,() ->0,() ->0, () ->0);
+    //   autoDrive.g(m_DriveAuto);
+    ChassisSpeeds speedy = m_driver.getTargetSpeeds(-1, 0, 0, 0);
+    m_driver.driveFieldOriented(speedy);
   }
 
   // Called once the command ends or is interrupted.
