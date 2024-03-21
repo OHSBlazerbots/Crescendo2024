@@ -9,14 +9,8 @@
         source-provider="NetworkTables"
         style="width: 148.021px; height: 20px; transform: translate(603.333px, 187.333px);"
     ></frc-label>
-    <frc-basic-fms-info
-        source-provider="NetworkTables"
-        style="width: 400.667px; height: 187.823px; transform: translate(131.2px, 3.2e-05px);"
-    ></frc-basic-fms-info>
-    <frc-accelerometer
-        source-provider="NetworkTables"
-        style="transform: translate(810.646px, 65.3125px); width: 344.656px; height: 83.3229px;"
-    ></frc-accelerometer>
+
+
 
 
     <frc-label
@@ -27,45 +21,32 @@
 
     <frc-camera-wrapper
         source-provider="NetworkTables"
-        style="transform: translate(538.25px, 33.7125px); width: 202.137px; height: 142.512px;"
-        streams="[]"
-        background-color="black"
-        wait-image="./no-camera-stream.jpg"
-        crosshair-color="white"
-        source-key="/CameraPublisher/USB Camera 0"
-        hide-crosshair=""
-    ></frc-camera-wrapper><frc-camera-wrapper
-        source-provider="NetworkTables"
-        style="width: 681.612px; height: 452.25px; transform: translate(351.588px, 241.45px);"
+        style="width: 681.612px; height: 452.25px; transform: translate(0.0004755px, 232.65px);"
         streams="[]"
         wait-image="./no-camera-stream.jpg"
         crosshair-color="white"
         source-key="/CameraPublisher/USB Camera 1"
         hide-crosshair=""
         background-color="black"
-    ></frc-camera-wrapper><frc-swerve-drivebase
-        source-provider="NetworkTables"
-        style="width: 235.963px; height: 391px; transform: translate(55.1875px, 205px);"
-        source-key="/SmartDashboard/swerve"
-        wheellocations="[2.5,2,2.5,-2,-2.5,2,-2.5,-2]"
-        measuredstates="[0,0,0,0,0,0,0,0]"
-        desiredstates="[0,0,0,0,0,0,0,0]"
-        sizeleftright="4"
-        sizefrontback="5"
-    ></frc-swerve-drivebase><frc-gyro
-        source-provider="NetworkTables"
-        style="transform: translate(1144px, 230.4px);"
-        source-key="/SmartDashboard/Adjusted IMU Yaw"
-    ></frc-gyro>
+    ></frc-camera-wrapper>
 
 
     <frc-sendable-chooser
         source-provider="NetworkTables"
         style="width: 220px; height: 69.8px; transform: translate(1176px, 45.6px);"
-        source-key="/SmartDashboard/auto chooser"
+        source-key="/SmartDashboard/SendableChooser[0]"
         options="[]"
         selected="Drive auto"
-    ></frc-sendable-chooser></dashboard-tab><dashboard-tab
+    ></frc-sendable-chooser><frc-camera-wrapper
+        source-provider="NetworkTables"
+        source-key="/CameraPublisher/USB Camera 0"
+        style="transform: translate(696.4px, 228.8px); width: 793.988px; height: 443.975px;"
+        streams="[]"
+        background-color="black"
+        wait-image="./no-camera-stream.jpg"
+        hide-crosshair=""
+        crosshair-color="white"
+    ></frc-camera-wrapper></dashboard-tab><dashboard-tab
     tab-name="Tab 2"
     slot="tab"
     source-provider="NetworkTables"

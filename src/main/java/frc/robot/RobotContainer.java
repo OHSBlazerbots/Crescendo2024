@@ -52,18 +52,16 @@ public class RobotContainer {
   CommandXboxController m_CoDriverController = new CommandXboxController(1);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private ShootingAuto m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 4);
-  private DriveAuto m_DriveAuto = new DriveAuto(m_DriveSubsystem, 0.5);
-
+  private Command m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 4);
+  private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 0.5);
+  private Command m_ShootNDriveAuto = m_shooterAuto.andThen(m_DriveAuto);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    m_ClimbingSubsystem.setClimberSpeed(0);
-    m_IntakeSubsystem.setIntakeSpeed(0);
-    m_IntakeSubsystem.setSwivelSpeed(0);
-    m_ShooterSubsystem.setShooterSpeed(0);
+   
+
     configureBindings();
     // AbsoluteDrive closedAbsoluteDriveAdv = new AbsoluteDrive(m_DriveSubsystem,
     //   () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
@@ -111,8 +109,16 @@ public class RobotContainer {
 
     m_chooser.addOption("Shooting auto", m_shooterAuto);
     m_chooser.addOption("Drive auto", m_DriveAuto);
+    m_chooser.addOption("Shoot, then Drive", m_ShootNDriveAuto);
+    m_chooser.setDefaultOption("standby", null);
     SmartDashboard.putData(m_chooser);
 
+  }
+  public void resetAll(){
+  //   m_ClimbingSubsystem.setClimberSpeed(0);
+  //   m_IntakeSubsystem.setIntakeSpeed(0);
+  //   m_IntakeSubsystem.setSwivelSpeed(0);
+  //   m_ShooterSubsystem.setShooterSpeed(0);
   }
 
   /**
@@ -178,8 +184,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_chooser.getSelected();
-    // return m_shooterAuto;
+    return m_shooterAuto;
     // return m_chooser.getSelected();
-    return m_DriveAuto;
+    // return m_DriveAuto;
 }
 }
