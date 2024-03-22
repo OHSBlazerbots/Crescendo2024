@@ -162,6 +162,26 @@ public class RobotContainer {
       .b()
       .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.5)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
+    m_CoDriverController
+      .axisGreaterThan(1, 0.5)
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(-0.5)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(0)));
+
+     m_CoDriverController
+      .axisLessThan(1, -0.5)
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(0.5)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(0)));
+
+    m_CoDriverController
+      .axisGreaterThan(5, 0.5)
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(-0.5)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0)));
+
+     m_CoDriverController
+      .axisLessThan(5, -0.5)
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0.5)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0)));
+      
     // m_CoDriverController
     //   .rightTrigger()
     //   .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));

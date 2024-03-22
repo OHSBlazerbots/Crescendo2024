@@ -61,7 +61,7 @@ public void setLeftClimberSpeed(double leftSpeed){
 }
 
 public void setRightClimberSpeed(double rightSpeed){
-   m_leftMotor.set(rightSpeed);
+   m_rightMotor.set(rightSpeed);
 }
 
  public void setClimberPosition(double rotations){
