@@ -156,11 +156,11 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
     m_CoDriverController
       .x()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.5)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.25)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_CoDriverController
       .b()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.5)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.25)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_CoDriverController
       .axisGreaterThan(1, 0.5)
