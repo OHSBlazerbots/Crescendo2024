@@ -56,6 +56,14 @@ public void setClimberSpeed(double speed) {
     writeMetricsToSmartDashboard();
  }
 
+public void setLeftClimberSpeed(double leftSpeed){
+   m_leftMotor.set(leftSpeed);
+}
+
+public void setRightClimberSpeed(double rightSpeed){
+   m_leftMotor.set(rightSpeed);
+}
+
  public void setClimberPosition(double rotations){
     m_climbingRightController.setReference(rotations, CANSparkMax.ControlType.kPosition);
     m_climbingLeftController.setReference(rotations, CANSparkMax.ControlType.kPosition);

@@ -53,7 +53,7 @@ public class RobotContainer {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   private Command m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 4);
-  private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 0.5);
+  private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 5);
   private Command m_ShootNDriveAuto = m_shooterAuto.andThen(m_DriveAuto);
 
 
@@ -159,18 +159,18 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
     m_CoDriverController
       .x()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.1)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.5)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_CoDriverController
       .b()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.1)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.5)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
-    m_CoDriverController
-      .rightTrigger()
-      .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));
-     m_CoDriverController
-      .leftTrigger()
-      .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
+    // m_CoDriverController
+    //   .rightTrigger()
+    //   .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));
+    //  m_CoDriverController
+    //   .leftTrigger()
+    //   .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
     m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
@@ -184,8 +184,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_chooser.getSelected();
-    return m_shooterAuto;
-    // return m_chooser.getSelected();
+    //return m_shooterAuto;
+    //return m_chooser.getSelected();
     // return m_DriveAuto;
+    return m_ShootNDriveAuto;
 }
 }
