@@ -140,9 +140,6 @@ public class RobotContainer {
       .povLeft() 
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.8)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
-    m_CoDriverController     
-      .povUp() 
-      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.25)));
      m_CoDriverController     
       .rightBumper() 
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
