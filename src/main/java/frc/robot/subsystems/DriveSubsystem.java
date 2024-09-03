@@ -399,7 +399,7 @@ public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translat
       // Make the robot move
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble(),
                                                                       translationY.getAsDouble(),
-                                                                      rotation.getAsDouble() * Math.PI,
+                                                                     rotation.getAsDouble() * Math.PI,
                                                                       swerveDrive.getYaw().getRadians(),
                                                                       swerveDrive.getMaximumVelocity()));
     });

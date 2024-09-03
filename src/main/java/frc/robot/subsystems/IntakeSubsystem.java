@@ -77,7 +77,9 @@ public void setIntakeSpeed(double speed) {
     writeMetricsToSmartDashboard();
  }
 
-
+public boolean isIntakeDown(){
+   return(m_swivelEncoder.getPosition() == 1);
+}
 
  public void writeMetricsToSmartDashboard() {
     intake.writeMetricsToSmartDashboard();
@@ -86,5 +88,4 @@ public void setIntakeSpeed(double speed) {
     SmartDashboard.putNumber("Swivle motor position", m_swivelEncoder.getPosition());
  }
 
-}
-
+} 

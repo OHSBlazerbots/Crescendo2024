@@ -52,8 +52,8 @@ public class RobotContainer {
   CommandXboxController m_CoDriverController = new CommandXboxController(1);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private Command m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 4);
-  private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 5);
+  private Command m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 3);
+  private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 1);
   private Command m_ShootNDriveAuto = m_shooterAuto.andThen(m_DriveAuto);
 
 
@@ -97,20 +97,23 @@ public class RobotContainer {
     Command driveFieldOrientedAnglularVelocity = m_DriveSubsystem.driveCommand(
         () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> m_driverController.getRawAxis(2));
+        () -> m_driverController.getRawAxis(4));
 
     Command driveFieldOrientedDirectAngleSim = m_DriveSubsystem.simDriveCommand(
         () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> m_driverController.getRawAxis(2));
+        () -> m_driverController.getRawAxis(4));
 
     m_DriveSubsystem.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
+    m_IntakeSubsystem.setDefaultCommand(
+      new InstantCommand(m_IntakeSubsystem::writeMetricsToSmartDashboard)
+    );
 
     m_chooser.addOption("Shooting auto", m_shooterAuto);
     m_chooser.addOption("Drive auto", m_DriveAuto);
-    m_chooser.addOption("Shoot, then Drive", m_ShootNDriveAuto);
-    m_chooser.setDefaultOption("standby", null);
+    m_chooser.setDefaultOption("Shoot, then Drive", m_ShootNDriveAuto);
+    //m_chooser.setDefaultOption("standby", null);
     SmartDashboard.putData(m_chooser);
 
   }
@@ -134,11 +137,11 @@ public class RobotContainer {
     
      m_CoDriverController     
       .povRight() 
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0.8)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
      m_CoDriverController     
       .povLeft() 
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.8)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
      m_CoDriverController     
       .rightBumper() 
@@ -156,30 +159,30 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
     m_CoDriverController
       .x()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.25)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.35)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_CoDriverController
       .b()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.25)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.35)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_CoDriverController
       .axisGreaterThan(1, 0.5)
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(-0.5)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(-1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(0)));
 
      m_CoDriverController
       .axisLessThan(1, -0.5)
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(0.5)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(0)));
 
     m_CoDriverController
       .axisGreaterThan(5, 0.5)
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(-0.5)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(-1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0)));
 
      m_CoDriverController
       .axisLessThan(5, -0.5)
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0.5)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0)));
       
     // m_CoDriverController
@@ -202,7 +205,7 @@ public class RobotContainer {
     // An example command will be run in autonomous
     // return m_chooser.getSelected();
     //return m_shooterAuto;
-    //return m_chooser.getSelected();
+    // return m_chooser.getSelected();
     // return m_DriveAuto;
     return m_ShootNDriveAuto;
 }
