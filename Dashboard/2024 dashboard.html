@@ -46,7 +46,11 @@
         wait-image="./no-camera-stream.jpg"
         hide-crosshair=""
         crosshair-color="white"
-    ></frc-camera-wrapper></dashboard-tab><dashboard-tab
+    ></frc-camera-wrapper><frc-number-bar
+        source-provider="NetworkTables"
+        style="transform: translate(139px, 120px);"
+        source-key="/SmartDashboard/Swivle motor position"
+    ></frc-number-bar></dashboard-tab><dashboard-tab
     tab-name="Tab 2"
     slot="tab"
     source-provider="NetworkTables"

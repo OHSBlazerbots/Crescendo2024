@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 public class IntakeDown extends Command{
     private final IntakeSubsystem m_intake;
@@ -31,8 +30,8 @@ public class IntakeDown extends Command{
   @Override
   public void execute() {
       // m_driver.driveCommand(() ->0,() ->1,() ->0);// drive straight at half
-    m_intake.setSwivelPosition(1);
-        
+    m_intake.setSwivelPosition(30);
+    System.out.println("excuting");    
   }
 
   // Called once the command ends or is interrupted.

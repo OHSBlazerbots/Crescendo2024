@@ -28,12 +28,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private RelativeEncoder m_swivelEncoder = m_swivelMotor.getEncoder();
     private SparkPIDController m_IntakeController = m_intakeMotor.getPIDController();
     private SparkPIDController m_SwivelController = m_swivelMotor.getPIDController();
-
-
-    public motorController intake = new motorController(m_IntakeController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
-    public motorController swivel = new motorController(m_SwivelController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
-
-
     
 
 public IntakeSubsystem() {
@@ -41,6 +35,9 @@ public IntakeSubsystem() {
     m_swivelMotor.restoreFactoryDefaults();
     m_swivelMotor.setIdleMode(IdleMode.kBrake);
 
+    m_SwivelController.setP(1.0/120.0);
+    m_SwivelController.setI(0);
+    m_SwivelController.setD(0);
      // Current limiting
      /*int TIMEOUT_MS = 10;
      m_Controller.getMotor().configPeakCurrentLimit(20, TIMEOUT_MS); // 20 Amps
@@ -78,11 +75,10 @@ public void setIntakeSpeed(double speed) {
  }
 
 public boolean isIntakeDown(){
-   return(m_swivelEncoder.getPosition() == 1);
+   return(m_swivelEncoder.getPosition() >= 29);
 }
 
  public void writeMetricsToSmartDashboard() {
-    intake.writeMetricsToSmartDashboard();
     SmartDashboard.putNumber("Intake motor set output", m_intakeMotor.get());
     SmartDashboard.putNumber("Swivle set output", m_swivelMotor.get());
     SmartDashboard.putNumber("Swivle motor position", m_swivelEncoder.getPosition());

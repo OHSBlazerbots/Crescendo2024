@@ -7,6 +7,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootingAuto;
+import frc.robot.commands.IntakeDown;
 import frc.robot.commands.DriveAuto;
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.Constants.IOConstants;
@@ -54,7 +55,9 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   private Command m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 3);
   private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 1);
+  private Command m_IntakeDown = new IntakeDown(m_IntakeSubsystem);
   private Command m_ShootNDriveAuto = m_shooterAuto.andThen(m_DriveAuto);
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -107,11 +110,12 @@ public class RobotContainer {
     m_DriveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
     m_IntakeSubsystem.setDefaultCommand(
-      new InstantCommand(m_IntakeSubsystem::writeMetricsToSmartDashboard)
+      new InstantCommand(m_IntakeSubsystem::writeMetricsToSmartDashboard,m_IntakeSubsystem)
     );
 
     m_chooser.addOption("Shooting auto", m_shooterAuto);
     m_chooser.addOption("Drive auto", m_DriveAuto);
+    m_chooser.addOption("Intake down", m_IntakeDown);
     m_chooser.setDefaultOption("Shoot, then Drive", m_ShootNDriveAuto);
     //m_chooser.setDefaultOption("standby", null);
     SmartDashboard.putData(m_chooser);
@@ -133,8 +137,8 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {  
-    
+  private void configureBindings() { 
+
      m_CoDriverController     
       .povRight() 
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(1)))
@@ -194,6 +198,10 @@ public class RobotContainer {
     m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
+    m_driverController
+      .start()
+      .onTrue(new IntakeDown(m_IntakeSubsystem));
+
   }
   
   /**
@@ -207,6 +215,7 @@ public class RobotContainer {
     //return m_shooterAuto;
     // return m_chooser.getSelected();
     // return m_DriveAuto;
-    return m_ShootNDriveAuto;
+    // return m_ShootNDriveAuto;
+    return m_IntakeDown;
 }
 }
