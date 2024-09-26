@@ -8,6 +8,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootingAuto;
 import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeUp;
 import frc.robot.commands.DriveAuto;
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.Constants.IOConstants;
@@ -56,6 +57,7 @@ public class RobotContainer {
   private Command m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 3);
   private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 1);
   private Command m_IntakeDown = new IntakeDown(m_IntakeSubsystem);
+  private Command m_IntakeUp = new IntakeUp(m_IntakeSubsystem);
   private Command m_ShootNDriveAuto = m_shooterAuto.andThen(m_DriveAuto);
 
 
@@ -199,9 +201,11 @@ public class RobotContainer {
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
     m_driverController
-      .start()
+      .y()
+      .onTrue(new IntakeUp(m_IntakeSubsystem));
+    m_driverController
+      .x()
       .onTrue(new IntakeDown(m_IntakeSubsystem));
-
   }
   
   /**

@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //      ShooteIrConstants.kShooterMotorPort);
     private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
     private CANSparkMax m_swivelMotor = new CANSparkMax(IntakeConstants.kSwivelMotorPort, MotorType.kBrushless);
-   //  private final DigitalInput m_IntakeLimitSwitch = new DigitalInput(IntakeConstants.kLimitSwitchPort);
+    private  DigitalInput m_IntakeLimitSwitch = new DigitalInput(0);
     private RelativeEncoder m_swivelEncoder = m_swivelMotor.getEncoder();
     private SparkPIDController m_IntakeController = m_intakeMotor.getPIDController();
     private SparkPIDController m_SwivelController = m_swivelMotor.getPIDController();
@@ -38,34 +38,28 @@ public IntakeSubsystem() {
     m_SwivelController.setP(1.0/120.0);
     m_SwivelController.setI(0);
     m_SwivelController.setD(0);
-     // Current limiting
-     /*int TIMEOUT_MS = 10;
-     m_Controller.getMotor().configPeakCurrentLimit(20, TIMEOUT_MS); // 20 Amps
-     m_shooterController.getMotor().configPeakCurrentDuration(200, TIMEOUT_MS); // 200ms
-     m_shooterController.getMotor().configContinuousCurrentLimit(20, TIMEOUT_MS); // 20 Amps
-     */
+    
 }
 
-// public boolean getIntakeHasNote() {
-//    // NOTE: this is intentionally inverted, because the limit switch is normally
-//    // closed
-//    return !m_IntakeLimitSwitch.get();
-//  }
+public boolean getIntakeHasNote() {
+   // NOTE: this is intentionally inverted, because the limit switch is normally
+   // closed
+   return !m_IntakeLimitSwitch.get();
+ }
 
 public void setIntakeSpeed(double speed) {
-    // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
-    // System.out.println("speed=" + speed);
-    // System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
-    m_intakeMotor.set(speed);
-   //  if(getIntakeHasNote() == true){
-   //    m_intakeMotor.set(0);
-   //  }
+
+    if(getIntakeHasNote() == true){
+      System.out.println("Note is in");
+      if(speed > 0){
+         m_intakeMotor.set(0);
+      }
+    } else {
+      m_intakeMotor.set(speed);
+    }
     writeMetricsToSmartDashboard();
  }
  public void setSwivelSpeed(double speed) {
-    // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
-    // System.out.println("speed=" + speed);
-    // System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
     m_swivelMotor.set(speed);
     writeMetricsToSmartDashboard();
  }
@@ -76,6 +70,10 @@ public void setIntakeSpeed(double speed) {
 
 public boolean isIntakeDown(){
    return(m_swivelEncoder.getPosition() >= 29);
+}
+
+public boolean isIntakeUp(){
+   return(m_swivelEncoder.getPosition() >= 1);
 }
 
  public void writeMetricsToSmartDashboard() {

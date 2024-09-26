@@ -13,19 +13,13 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ClimbingSubsystem extends SubsystemBase {
 
-    // private static final SparkPIDController m_shooterController = new SparkPIDController(
-    //      ShooterConstants.kShooterGains,
-    //      ShooterConstants.kShooterMotorPort);
     private CANSparkMax m_rightMotor = new CANSparkMax(ClimbingConstants.kRightClimbingMotorPort, MotorType.kBrushless);
     private CANSparkMax m_leftMotor = new CANSparkMax(ClimbingConstants.kLeftClimbingMotorPort, MotorType.kBrushless);
     private SparkPIDController m_climbingRightController = m_rightMotor.getPIDController();
-   private SparkPIDController m_climbingLeftController = m_leftMotor.getPIDController();
+    private SparkPIDController m_climbingLeftController = m_leftMotor.getPIDController();
+    private RelativeEncoder m_leftClimbEncoder = m_leftMotor.getEncoder();
+    private RelativeEncoder m_rightClimbEncoder = m_rightMotor.getEncoder();
 
-
-    public motorController rightClimber = new motorController(m_climbingRightController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
-    public motorController leftClimber = new motorController(m_climbingLeftController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
-
-    
 
 public ClimbingSubsystem() {
 
@@ -38,8 +32,7 @@ SmartDashboard.putNumber("Right forward Soft Limit", rightForwardLimit);
 SmartDashboard.putNumber("Right reverse Soft Limit", rightReverseLimit);
 SmartDashboard.putNumber("Left forward Soft Limit", leftForwardLimit);
 SmartDashboard.putNumber("Left reverse Soft Limit", leftReverseLimit);
-    // m_shooterController.zeroSensors();
-    // m_shooterController.setPositionZero();
+    
     m_rightMotor.restoreFactoryDefaults();
     m_leftMotor.restoreFactoryDefaults();
     m_rightMotor.setIdleMode(IdleMode.kBrake);
@@ -61,11 +54,8 @@ SmartDashboard.putNumber("Left reverse Soft Limit", leftReverseLimit);
 }
 
 public void setClimberSpeed(double speed) {
-    // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
-   //  System.out.println("speed=" + speed);
-   //  System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
     m_rightMotor.set(speed);
-   m_leftMotor.set(speed);
+    m_leftMotor.set(speed);
     writeMetricsToSmartDashboard();
  }
 
@@ -85,10 +75,10 @@ public void setRightClimberSpeed(double rightSpeed){
 
 
  public void writeMetricsToSmartDashboard() {
-    rightClimber.writeMetricsToSmartDashboard();
-    leftClimber.writeMetricsToSmartDashboard();
     SmartDashboard.putNumber("Motor set output", m_rightMotor.get());
     SmartDashboard.putNumber("Motor set output", m_leftMotor.get());
+    SmartDashboard.putNumber("Left motor position", m_leftClimbEncoder.getPosition());
+    SmartDashboard.putNumber("Right motor position", m_rightClimbEncoder.getPosition());
  }
 
 }

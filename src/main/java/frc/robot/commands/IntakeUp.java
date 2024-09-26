@@ -13,22 +13,24 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class IntakeDown extends Command{
+public class IntakeUp extends Command{
     private final IntakeSubsystem m_intake;
     
-    public IntakeDown(IntakeSubsystem intake) {
+    public IntakeUp(IntakeSubsystem intake) {
         m_intake = intake;
         addRequirements(m_intake);
     }
 @Override
   public void initialize() {
-      System.out.println("Intake moving down");
+      // m_driver.ChassisSpeeds(0.25,0.0,0.0);
+      System.out.println("Intake moving up");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.setSwivelPosition(30);
+      // m_driver.driveCommand(() ->0,() ->1,() ->0);// drive straight at half
+    m_intake.setSwivelPosition(0);
     System.out.println("excuting");    
   }
 
