@@ -42,7 +42,7 @@ public class DriveSubsystem extends SubsystemBase
    * The auto builder for PathPlanner, there can only ever be one created so we save it just incase we generate multiple
    * paths with events.
    */
-//   private SwerveAutoBuilder autoBuilder  = null;
+  private SwerveAutoBuilder autoBuilder  = null;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -340,34 +340,34 @@ public class DriveSubsystem extends SubsystemBase
    * @param useAllianceColor Automatically transform the path based on alliance color.
    * @return PathPlanner command to follow the given path.
    */
-//   public Command creatPathPlannerCommand(String path, PathConstraints constraints, Map<String, Command> eventMap,
-//                                          PIDConstants translation, PIDConstants rotation, boolean useAllianceColor)
-//   {
-//     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(path, constraints);
-// //    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-// //      Pose2d supplier,
-// //      Pose2d consumer- used to reset odometry at the beginning of auto,
-// //      PID constants to correct for translation error (used to create the X and Y PID controllers),
-// //      PID constants to correct for rotation error (used to create the rotation controller),
-// //      Module states consumer used to output to the drive subsystem,
-// //      Should the path be automatically mirrored depending on alliance color. Optional- defaults to true
-// //   )
-//     if (autoBuilder == null)
-//     {
-//       autoBuilder = new SwerveAutoBuilder(
-//           swerveDrive::getPose,
-//           swerveDrive::resetOdometry,
-//           translation,
-//           rotation,
-//           swerveDrive::setChassisSpeeds,
-//           eventMap,
-//           useAllianceColor,
-//           this
-//       );
-//     }
+  public Command creatPathPlannerCommand(String path, PathConstraints constraints, Map<String, Command> eventMap,
+                                         PIDConstants translation, PIDConstants rotation, boolean useAllianceColor)
+  {
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(path, constraints);
+  //  SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+  //    Pose2d supplier,
+  //    Pose2d consumer- used to reset odometry at the beginning of auto,
+  //    PID constants to correct for translation error (used to create the X and Y PID controllers),
+  //    PID constants to correct for rotation error (used to create the rotation controller),
+  //    Module states consumer used to output to the drive subsystem,
+  //    Should the path be automatically mirrored depending on alliance color. Optional- defaults to true
+  // )
+    if (autoBuilder == null)
+    {
+      autoBuilder = new SwerveAutoBuilder(
+          swerveDrive::getPose,
+          swerveDrive::resetOdometry,
+          translation,
+          rotation,
+          swerveDrive::setChassisSpeeds,
+          eventMap,
+          useAllianceColor,
+          this
+      );
+    }
 
-//     return autoBuilder.fullAuto(pathGroup);
-//   }
+    return autoBuilder.fullAuto(pathGroup);
+  }
 public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
                               DoubleSupplier headingY)
   {
