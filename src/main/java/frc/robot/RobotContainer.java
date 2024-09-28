@@ -111,9 +111,6 @@ public class RobotContainer {
 
     m_DriveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
-    m_IntakeSubsystem.setDefaultCommand(
-      new InstantCommand(m_IntakeSubsystem::writeMetricsToSmartDashboard,m_IntakeSubsystem)
-    );
 
     m_chooser.addOption("Shooting auto", m_shooterAuto);
     m_chooser.addOption("Drive auto", m_DriveAuto);

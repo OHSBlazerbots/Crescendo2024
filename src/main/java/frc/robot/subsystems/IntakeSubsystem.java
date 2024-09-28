@@ -57,15 +57,12 @@ public void setIntakeSpeed(double speed) {
     } else {
       m_intakeMotor.set(speed);
     }
-    writeMetricsToSmartDashboard();
  }
  public void setSwivelSpeed(double speed) {
     m_swivelMotor.set(speed);
-    writeMetricsToSmartDashboard();
  }
  public void setSwivelPosition(double rotations){
     m_SwivelController.setReference(rotations, CANSparkMax.ControlType.kPosition);
-    writeMetricsToSmartDashboard();
  }
 
 public boolean isIntakeDown(){
@@ -76,10 +73,11 @@ public boolean isIntakeUp(){
    return(m_swivelEncoder.getPosition() >= 1);
 }
 
- public void writeMetricsToSmartDashboard() {
+@Override
+  public void periodic() {
     SmartDashboard.putNumber("Intake motor set output", m_intakeMotor.get());
     SmartDashboard.putNumber("Swivle set output", m_swivelMotor.get());
     SmartDashboard.putNumber("Swivle motor position", m_swivelEncoder.getPosition());
- }
+  }
 
 } 

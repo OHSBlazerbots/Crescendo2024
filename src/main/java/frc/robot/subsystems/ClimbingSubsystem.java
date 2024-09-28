@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.ClimbingConstants;
 import frc.robot.subsystems.motorController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -56,7 +57,6 @@ SmartDashboard.putNumber("Left reverse Soft Limit", leftReverseLimit);
 public void setClimberSpeed(double speed) {
     m_rightMotor.set(speed);
     m_leftMotor.set(speed);
-    writeMetricsToSmartDashboard();
  }
 
 public void setLeftClimberSpeed(double leftSpeed){
@@ -70,16 +70,18 @@ public void setRightClimberSpeed(double rightSpeed){
  public void setClimberPosition(double rotations){
     m_climbingRightController.setReference(rotations, CANSparkMax.ControlType.kPosition);
     m_climbingLeftController.setReference(rotations, CANSparkMax.ControlType.kPosition);
-    writeMetricsToSmartDashboard();
  }
+ @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Climber right Motor set output", m_rightMotor.get());
+    SmartDashboard.putNumber("Climber left Motor set output", m_leftMotor.get());
+    SmartDashboard.putNumber("Climber left motor position", m_leftClimbEncoder.getPosition());
+    SmartDashboard.putNumber("Climber right motor position", m_rightClimbEncoder.getPosition());
+    
+  }
 
 
- public void writeMetricsToSmartDashboard() {
-    SmartDashboard.putNumber("Motor set output", m_rightMotor.get());
-    SmartDashboard.putNumber("Motor set output", m_leftMotor.get());
-    SmartDashboard.putNumber("Left motor position", m_leftClimbEncoder.getPosition());
-    SmartDashboard.putNumber("Right motor position", m_rightClimbEncoder.getPosition());
- }
+
 
 }
 
