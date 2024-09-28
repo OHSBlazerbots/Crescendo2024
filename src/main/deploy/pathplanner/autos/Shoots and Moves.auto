@@ -8,7 +8,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker to Note"
+            "pathName": "Right Speaker to Right Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Speaker to Middle Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Speaker to Left Note"
           }
         }
       ]

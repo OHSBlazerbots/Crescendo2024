@@ -4,28 +4,35 @@
     source-provider="NetworkTables"
     selected=""
 >
-    <frc-label
-        text="main cam"
+
+    <frc-basic-fms-info
         source-provider="NetworkTables"
-        style="width: 148.021px; height: 20px; transform: translate(603.333px, 187.333px);"
-    ></frc-label>
-
-
-
-
-    <frc-label
-        text="Aim cam"
+        style="width: 400.667px; height: 187.823px; transform: translate(131.2px, 3.2e-05px);"
+    ></frc-basic-fms-info>
+    <frc-accelerometer
         source-provider="NetworkTables"
-        style="width: 62.2292px; height: 20px; transform: translate(618.667px, 0px);"
-    ></frc-label>
+        style="transform: translate(545.038px, 67.7125px); width: 344.625px; height: 67.3px;"
+    ></frc-accelerometer>
+
+
+
 
     <frc-camera-wrapper
         source-provider="NetworkTables"
-        style="width: 681.612px; height: 452.25px; transform: translate(0.0004755px, 232.65px);"
+        style="transform: translate(803.038px, 234.513px); width: 698.925px; height: 458.5px;"
         streams="[]"
+        background-color="black"
         wait-image="./no-camera-stream.jpg"
         crosshair-color="white"
         source-key="/CameraPublisher/USB Camera 1"
+        hide-crosshair=""
+    ></frc-camera-wrapper><frc-camera-wrapper
+        source-provider="NetworkTables"
+        style="width: 741.6px; height: 462.65px; transform: translate(20.3875px, 228.65px);"
+        streams="[]"
+        wait-image="./no-camera-stream.jpg"
+        crosshair-color="white"
+        source-key="/CameraPublisher/USB Camera 0"
         hide-crosshair=""
         background-color="black"
     ></frc-camera-wrapper>
@@ -33,20 +40,10 @@
 
     <frc-sendable-chooser
         source-provider="NetworkTables"
-        style="width: 220px; height: 69.8px; transform: translate(1176px, 45.6px);"
-        source-key="/SmartDashboard/SendableChooser[0]"
+        style="width: 220px; height: 69.8px; transform: translate(993.6px, 56px);"
+        source-key="auto chooser"
         options="[]"
-        selected="Drive auto"
-    ></frc-sendable-chooser><frc-camera-wrapper
-        source-provider="NetworkTables"
-        source-key="/CameraPublisher/USB Camera 0"
-        style="transform: translate(696.4px, 228.8px); width: 793.988px; height: 443.975px;"
-        streams="[]"
-        background-color="black"
-        wait-image="./no-camera-stream.jpg"
-        hide-crosshair=""
-        crosshair-color="white"
-    ></frc-camera-wrapper></dashboard-tab><dashboard-tab
+    ></frc-sendable-chooser></dashboard-tab><dashboard-tab
     tab-name="Tab 2"
     slot="tab"
     source-provider="NetworkTables"
@@ -72,6 +69,6 @@
         source-provider="NetworkTables"
         style="transform: translate(742.4px, 328px); width: 244px; height: 270.4px;"
         source-key="/SmartDashboard/Module[backright] Adjusted Absolute Encoder"
-    ></frc-gyro>aaa
+    ></frc-gyro>
 
 </dashboard-tab>
