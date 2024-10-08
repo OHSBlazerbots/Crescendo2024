@@ -187,6 +187,12 @@ public class RobotContainer {
       .axisLessThan(5, -0.5)
       .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0)));
+      m_CoDriverController
+      .back()
+      .onTrue(new IntakeUp(m_IntakeSubsystem));
+      m_CoDriverController
+      .start()
+      .onTrue(new IntakeDown(m_IntakeSubsystem));
       
     // m_CoDriverController
     //   .rightTrigger()
@@ -197,12 +203,6 @@ public class RobotContainer {
     m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
-    m_driverController
-      .y()
-      .onTrue(new IntakeUp(m_IntakeSubsystem));
-    m_driverController
-      .x()
-      .onTrue(new IntakeDown(m_IntakeSubsystem));
   }
   
   /**

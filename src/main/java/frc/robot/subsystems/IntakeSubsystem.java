@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //      ShooteIrConstants.kShooterMotorPort);
     private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
     private CANSparkMax m_swivelMotor = new CANSparkMax(IntakeConstants.kSwivelMotorPort, MotorType.kBrushless);
-    private  DigitalInput m_IntakeLimitSwitch = new DigitalInput(0);
+    private  DigitalInput m_IntakeLimitSwitch = new DigitalInput(4);
     private RelativeEncoder m_swivelEncoder = m_swivelMotor.getEncoder();
     private SparkPIDController m_IntakeController = m_intakeMotor.getPIDController();
     private SparkPIDController m_SwivelController = m_swivelMotor.getPIDController();
@@ -35,7 +35,7 @@ public IntakeSubsystem() {
     m_swivelMotor.restoreFactoryDefaults();
     m_swivelMotor.setIdleMode(IdleMode.kBrake);
 
-    m_SwivelController.setP(1.0/120.0);
+    m_SwivelController.setP(1.0/30.0);
     m_SwivelController.setI(0);
     m_SwivelController.setD(0);
     
@@ -78,6 +78,7 @@ public boolean isIntakeUp(){
     SmartDashboard.putNumber("Intake motor set output", m_intakeMotor.get());
     SmartDashboard.putNumber("Swivle set output", m_swivelMotor.get());
     SmartDashboard.putNumber("Swivle motor position", m_swivelEncoder.getPosition());
+    SmartDashboard.putBoolean("Intake has note", getIntakeHasNote());
   }
 
 } 

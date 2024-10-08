@@ -57,6 +57,7 @@ SmartDashboard.putNumber("Left reverse Soft Limit", leftReverseLimit);
 public void setClimberSpeed(double speed) {
     m_rightMotor.set(speed);
     m_leftMotor.set(speed);
+    periodic();
  }
 
 public void setLeftClimberSpeed(double leftSpeed){
@@ -77,6 +78,7 @@ public void setRightClimberSpeed(double rightSpeed){
     SmartDashboard.putNumber("Climber left Motor set output", m_leftMotor.get());
     SmartDashboard.putNumber("Climber left motor position", m_leftClimbEncoder.getPosition());
     SmartDashboard.putNumber("Climber right motor position", m_rightClimbEncoder.getPosition());
+    System.out.println("it's working");
     
   }
 

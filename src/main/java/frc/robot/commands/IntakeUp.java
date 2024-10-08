@@ -23,7 +23,6 @@ public class IntakeUp extends Command{
 @Override
   public void initialize() {
       // m_driver.ChassisSpeeds(0.25,0.0,0.0);
-      System.out.println("Intake moving up");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +30,6 @@ public class IntakeUp extends Command{
   public void execute() {
       // m_driver.driveCommand(() ->0,() ->1,() ->0);// drive straight at half
     m_intake.setSwivelPosition(0);
-    System.out.println("excuting");    
   }
 
   // Called once the command ends or is interrupted.

@@ -22,14 +22,12 @@ public class IntakeDown extends Command{
     }
 @Override
   public void initialize() {
-      System.out.println("Intake moving down");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_intake.setSwivelPosition(30);
-    System.out.println("excuting");    
   }
 
   // Called once the command ends or is interrupted.
