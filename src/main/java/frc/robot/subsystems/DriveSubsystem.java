@@ -37,7 +37,7 @@ public class DriveSubsystem extends SubsystemBase
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  public  double            maximumSpeed = Units.feetToMeters(14.5);
+  public double maximumSpeed = Units.feetToMeters(14.5);
   /**
    * The auto builder for PathPlanner, there can only ever be one created so we save it just incase we generate multiple
    * paths with events.
@@ -399,7 +399,7 @@ public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translat
       // Make the robot move
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble(),
                                                                       translationY.getAsDouble(),
-                                                                      rotation.getAsDouble() * Math.PI,
+                                                                     rotation.getAsDouble() * Math.PI,
                                                                       swerveDrive.getYaw().getRadians(),
                                                                       swerveDrive.getMaximumVelocity()));
     });
@@ -423,5 +423,10 @@ public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translat
                         true,
                         false);
     });
+  }
+
+  public void ChassisSpeeds(double d, double e, double f) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'ChassisSpeeds'");
   }
 }

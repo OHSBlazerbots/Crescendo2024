@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.motorController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,15 +24,10 @@ public class IntakeSubsystem extends SubsystemBase {
     //      ShooteIrConstants.kShooterMotorPort);
     private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
     private CANSparkMax m_swivelMotor = new CANSparkMax(IntakeConstants.kSwivelMotorPort, MotorType.kBrushless);
+    private  DigitalInput m_IntakeLimitSwitch = new DigitalInput(0);
     private RelativeEncoder m_swivelEncoder = m_swivelMotor.getEncoder();
     private SparkPIDController m_IntakeController = m_intakeMotor.getPIDController();
     private SparkPIDController m_SwivelController = m_swivelMotor.getPIDController();
-
-
-    public motorController intake = new motorController(m_IntakeController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
-    public motorController swivel = new motorController(m_SwivelController, 0.15, 0, 0, 0, 1, 1, -1, 5700);
-
-
     
 
 public IntakeSubsystem() {
@@ -38,39 +35,49 @@ public IntakeSubsystem() {
     m_swivelMotor.restoreFactoryDefaults();
     m_swivelMotor.setIdleMode(IdleMode.kBrake);
 
-     // Current limiting
-     /*int TIMEOUT_MS = 10;
-     m_Controller.getMotor().configPeakCurrentLimit(20, TIMEOUT_MS); // 20 Amps
-     m_shooterController.getMotor().configPeakCurrentDuration(200, TIMEOUT_MS); // 200ms
-     m_shooterController.getMotor().configContinuousCurrentLimit(20, TIMEOUT_MS); // 20 Amps
-     */
+    m_SwivelController.setP(1.0/120.0);
+    m_SwivelController.setI(0);
+    m_SwivelController.setD(0);
+    
 }
 
+public boolean getIntakeHasNote() {
+   // NOTE: this is intentionally inverted, because the limit switch is normally
+   // closed
+   return !m_IntakeLimitSwitch.get();
+ }
+
 public void setIntakeSpeed(double speed) {
-    // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
-    // System.out.println("speed=" + speed);
-    // System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
-    m_intakeMotor.set(speed);
-    writeMetricsToSmartDashboard();
+
+    if(getIntakeHasNote() == true){
+      System.out.println("Note is in");
+      if(speed > 0){
+         m_intakeMotor.set(0);
+      }
+    } else {
+      m_intakeMotor.set(speed);
+    }
  }
  public void setSwivelSpeed(double speed) {
-    // speed = SmartDashboard.getNumber("Shooter/Speed Output", 0);
-    // System.out.println("speed=" + speed);
-    // System.out.println("dashboard=" + SmartDashboard.getNumber("Shooter/Speed Output", 0));
     m_swivelMotor.set(speed);
-    writeMetricsToSmartDashboard();
  }
  public void setSwivelPosition(double rotations){
     m_SwivelController.setReference(rotations, CANSparkMax.ControlType.kPosition);
-    writeMetricsToSmartDashboard();
  }
 
- public void writeMetricsToSmartDashboard() {
-    intake.writeMetricsToSmartDashboard();
-    SmartDashboard.putNumber("Motor set output", m_intakeMotor.get());
-    SmartDashboard.putNumber("Motor set output", m_swivelMotor.get());
-    SmartDashboard.putNumber("ProcessVariable", m_swivelEncoder.getPosition());
- }
-
+public boolean isIntakeDown(){
+   return(m_swivelEncoder.getPosition() >= 29);
 }
 
+public boolean isIntakeUp(){
+   return(m_swivelEncoder.getPosition() >= 1);
+}
+
+@Override
+  public void periodic() {
+    SmartDashboard.putNumber("Intake motor set output", m_intakeMotor.get());
+    SmartDashboard.putNumber("Swivle set output", m_swivelMotor.get());
+    SmartDashboard.putNumber("Swivle motor position", m_swivelEncoder.getPosition());
+  }
+
+} 
