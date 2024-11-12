@@ -4,7 +4,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-
+import frc.robot.subsystems.LightingSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.AbsoluteDrive;
@@ -36,6 +36,7 @@ import frc.robot.subsystems.CameraSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final LightingSubsystem m_LightingSubsystem = new LightingSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
