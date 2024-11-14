@@ -7,6 +7,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootingAuto;
+import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeUp;
 import frc.robot.commands.DriveAuto;
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.Constants.IOConstants;
@@ -52,9 +54,12 @@ public class RobotContainer {
   CommandXboxController m_CoDriverController = new CommandXboxController(1);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private Command m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 4);
-  private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 0.5);
+  private Command m_shooterAuto = new ShootingAuto(m_ShooterSubsystem, m_IntakeSubsystem, 3);
+  private Command m_DriveAuto = new DriveAuto(m_DriveSubsystem, 1);
+  private Command m_IntakeDown = new IntakeDown(m_IntakeSubsystem);
+  private Command m_IntakeUp = new IntakeUp(m_IntakeSubsystem);
   private Command m_ShootNDriveAuto = m_shooterAuto.andThen(m_DriveAuto);
+  private Command m_Path = m_DriveSubsystem.getAutonomousCommand(null, false);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -97,20 +102,22 @@ public class RobotContainer {
     Command driveFieldOrientedAnglularVelocity = m_DriveSubsystem.driveCommand(
         () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> m_driverController.getRawAxis(2));
+        () -> m_driverController.getRawAxis(4));
 
     Command driveFieldOrientedDirectAngleSim = m_DriveSubsystem.simDriveCommand(
         () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> m_driverController.getRawAxis(2));
+        () -> m_driverController.getRawAxis(4));
 
     m_DriveSubsystem.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
 
     m_chooser.addOption("Shooting auto", m_shooterAuto);
     m_chooser.addOption("Drive auto", m_DriveAuto);
-    m_chooser.addOption("Shoot, then Drive", m_ShootNDriveAuto);
-    m_chooser.setDefaultOption("standby", null);
+    m_chooser.addOption("Intake down", m_IntakeDown);
+    m_chooser.addOption("Path", m_Path);
+    m_chooser.setDefaultOption("Shoot, then Drive", m_ShootNDriveAuto);
+    //m_chooser.setDefaultOption("standby", null);
     SmartDashboard.putData(m_chooser);
 
   }
@@ -130,19 +137,16 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {  
-    
+  private void configureBindings() { 
+
      m_CoDriverController     
       .povRight() 
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0.8)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
      m_CoDriverController     
       .povLeft() 
-      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-0.8)))
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(-1)))
       .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setClimberSpeed(0)));
-    m_CoDriverController     
-      .povUp() 
-      .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(-0.25)));
      m_CoDriverController     
       .rightBumper() 
       .onTrue(Commands.runOnce(() -> m_ShooterSubsystem.setShooterSpeed(0)));
@@ -159,18 +163,44 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setIntakeSpeed(0)));
     m_CoDriverController
       .x()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.1)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0.35)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_CoDriverController
       .b()
-      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.1)))
+      .onTrue(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(-0.35)))
       .onFalse(Commands.runOnce(() -> m_IntakeSubsystem.setSwivelSpeed(0)));
     m_CoDriverController
-      .rightTrigger()
-      .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));
+      .axisGreaterThan(1, 0.5)
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(-1)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(0)));
+
      m_CoDriverController
-      .leftTrigger()
-      .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
+      .axisLessThan(1, -0.5)
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(1)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setLeftClimberSpeed(0)));
+
+    m_CoDriverController
+      .axisGreaterThan(5, 0.5)
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(-1)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0)));
+
+     m_CoDriverController
+      .axisLessThan(5, -0.5)
+      .onTrue(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(1)))
+      .onFalse(Commands.runOnce(() -> m_ClimbingSubsystem.setRightClimberSpeed(0)));
+      m_CoDriverController
+      .back()
+      .onTrue(new IntakeUp(m_IntakeSubsystem));
+      m_CoDriverController
+      .start()
+      .onTrue(new IntakeDown(m_IntakeSubsystem));
+      
+    // m_CoDriverController
+    //   .rightTrigger()
+    //   .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(0)));
+    //  m_CoDriverController
+    //   .leftTrigger()
+    //   .onTrue(Commands.runOnce(() ->m_IntakeSubsystem.setSwivelPosition(-1)));
     m_driverController
       .back()
       .onTrue((new InstantCommand(m_DriveSubsystem::zeroGyro)));
@@ -179,13 +209,15 @@ public class RobotContainer {
   /**
    * Use this to pass the autonomous command to tgihe main {@link Robot} class.
    *
-   * @return the command to run in autonomous
+   * @return the command to run in autonomous  
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return m_chooser.getSelected();
-    return m_shooterAuto;
+    return m_chooser.getSelected();
+    //return m_shooterAuto;
     // return m_chooser.getSelected();
     // return m_DriveAuto;
+    // return m_ShootNDriveAuto;
+    // return m_IntakeDown;
 }
 }

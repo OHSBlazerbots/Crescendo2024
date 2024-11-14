@@ -14,10 +14,19 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.File;
 import java.util.function.DoubleSupplier;
+
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
@@ -37,7 +46,13 @@ public class DriveSubsystem extends SubsystemBase
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  public double maximumSpeed = Units.feetToMeters(14.5);
+
+  public double maximumSpeed = Units.feetToMeters(10);//14.5 is original
+  /**
+   * The auto builder for PathPlanner, there can only ever be one created so we save it just incase we generate multiple
+   * paths with events.
+   */
+//   private SwerveAutoBuilder autoBuilder  = null;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -86,6 +101,7 @@ public class DriveSubsystem extends SubsystemBase
   /**
    * Setup AutoBuilder for PathPlanner.
    */
+
   public void setupPathPlanner()
   {
     AutoBuilder.configureHolonomic(
@@ -117,7 +133,7 @@ public class DriveSubsystem extends SubsystemBase
         this // Reference to this subsystem to set requirements
                                   );
   }
-  
+
   /**
    * Get the path follower with events.
    *
@@ -204,6 +220,7 @@ public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translat
                         false);
     });
   }
+
 
   /**
    * The primary method for controlling the drivebase.  Takes a {@link Translation2d} and a rotation rate, and
@@ -465,3 +482,108 @@ public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translat
   }
 }
   
+
+
+  /**
+   * Factory to fetch the PathPlanner command to follow the defined path.
+   *
+   * @param path             Path planner path to specify.
+   * @param constraints      {@link PathConstraints} for {@link com.pathplanner.lib.PathPlanner#loadPathGroup} function
+   *                         limiting velocity and acceleration.
+   * @param eventMap         {@link java.util.HashMap} of commands corresponding to path planner events given as
+   *                         strings.
+   * @param translation      The {@link PIDConstants} for the translation of the robot while following the path.
+   * @param rotation         The {@link PIDConstants} for the rotation of the robot while following the path.
+   * @param useAllianceColor Automatically transform the path based on alliance color.
+   * @return PathPlanner command to follow the given path.
+   */
+//   public Command creatPathPlannerCommand(String path, PathConstraints constraints, Map<String, Command> eventMap,
+//                                          PIDConstants translation, PIDConstants rotation, boolean useAllianceColor)
+//   {
+//     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(path, constraints);
+// //    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+// //      Pose2d supplier,
+// //      Pose2d consumer- used to reset odometry at the beginning of auto,
+// //      PID constants to correct for translation error (used to create the X and Y PID controllers),
+// //      PID constants to correct for rotation error (used to create the rotation controller),
+// //      Module states consumer used to output to the drive subsystem,
+// //      Should the path be automatically mirrored depending on alliance color. Optional- defaults to true
+// //   )
+//     if (autoBuilder == null)
+//     {
+//       autoBuilder = new SwerveAutoBuilder(
+//           swerveDrive::getPose,
+//           swerveDrive::resetOdometry,
+//           translation,
+//           rotation,
+//           swerveDrive::setChassisSpeeds,
+//           eventMap,
+//           useAllianceColor,
+//           this
+//       );
+//     }
+
+//     return autoBuilder.fullAuto(pathGroup);
+//   }
+public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
+                              DoubleSupplier headingY)
+  {
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
+    return run(() -> {
+      double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
+      double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
+      // Make the robot move
+      driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
+                                                                      headingX.getAsDouble(),
+                                                                      headingY.getAsDouble(),
+                                                                      swerveDrive.getYaw().getRadians(),
+                                                                      swerveDrive.getMaximumVelocity()));
+    });
+  }
+
+  /**
+   * Command to drive the robot using translative values and heading as a setpoint.
+   *
+   * @param translationX Translation in the X direction.
+   * @param translationY Translation in the Y direction.
+   * @param rotation     Rotation as a value between [-1, 1] converted to radians.
+   * @return Drive command.
+   */
+  public Command simDriveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotation)
+  {
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
+    return run(() -> {
+      // Make the robot move
+      driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble(),
+                                                                      translationY.getAsDouble(),
+                                                                     rotation.getAsDouble() * Math.PI,
+                                                                      swerveDrive.getYaw().getRadians(),
+                                                                      swerveDrive.getMaximumVelocity()));
+    });
+  }
+
+  /**
+   * Command to drive the robot using translative values and heading as angular velocity.
+   *
+   * @param translationX     Translation in the X direction. Cubed for smoother controls.
+   * @param translationY     Translation in the Y direction. Cubed for smoother controls.
+   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
+   * @return Drive command.
+   */
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
+  {
+    return run(() -> {
+      // Make the robot move
+      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
+                                          Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
+                        Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
+                        true,
+                        false);
+    });
+  }
+
+  public void ChassisSpeeds(double d, double e, double f) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'ChassisSpeeds'");
+  }
+}

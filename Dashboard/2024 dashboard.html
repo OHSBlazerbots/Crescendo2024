@@ -43,7 +43,29 @@
         style="width: 220px; height: 69.8px; transform: translate(993.6px, 56px);"
         source-key="auto chooser"
         options="[]"
-    ></frc-sendable-chooser></dashboard-tab><dashboard-tab
+        selected="Drive auto"
+    ></frc-sendable-chooser><frc-camera-wrapper
+        source-provider="NetworkTables"
+        source-key="/CameraPublisher/USB Camera 0"
+        style="transform: translate(696.4px, 228.8px); width: 793.988px; height: 443.975px;"
+        streams="[]"
+        background-color="black"
+        wait-image="./no-camera-stream.jpg"
+        hide-crosshair=""
+        crosshair-color="white"
+    ></frc-camera-wrapper><frc-number-bar
+        source-provider="NetworkTables"
+        style="transform: translate(167px, 125px);"
+        source-key="/SmartDashboard/Climber left motor position"
+    ></frc-number-bar><frc-number-bar
+        source-provider="NetworkTables"
+        style="transform: translate(561px, 122px);"
+        source-key="/SmartDashboard/Climber right motor position"
+    ></frc-number-bar><frc-boolean-box
+        source-provider="NetworkTables"
+        style="transform: translate(73px, 66px);"
+        source-key="/SmartDashboard/Intake has note"
+    ></frc-boolean-box></dashboard-tab><dashboard-tab
     tab-name="Tab 2"
     slot="tab"
     source-provider="NetworkTables"

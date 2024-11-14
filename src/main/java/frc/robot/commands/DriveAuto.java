@@ -43,13 +43,16 @@ public class DriveAuto extends CommandBase{
   public void execute() {
     //   Command autoDrive = m_driver.driveCommand(() ->-1,() ->0,() ->0, () ->0);
     //   autoDrive.g(m_DriveAuto);
-    ChassisSpeeds speedy = m_driver.getTargetSpeeds(-1, 0, 0, 0);
+    ChassisSpeeds speedy = m_driver.getTargetSpeeds(1, 0, -1, 0);
     m_driver.driveFieldOriented(speedy);
+    //m_driver.drive(sp;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    ChassisSpeeds speedy = m_driver.getTargetSpeeds(0, 0, 0, 0);
+    m_driver.driveFieldOriented(speedy);
   }
 
   // Returns true when the command should end.
