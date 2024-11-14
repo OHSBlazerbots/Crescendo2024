@@ -59,7 +59,7 @@ public class RobotContainer {
   private Command m_IntakeDown = new IntakeDown(m_IntakeSubsystem);
   private Command m_IntakeUp = new IntakeUp(m_IntakeSubsystem);
   private Command m_ShootNDriveAuto = m_shooterAuto.andThen(m_DriveAuto);
-
+  private Command m_Path = m_DriveSubsystem.getAutonomousCommand(null, false);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -115,6 +115,7 @@ public class RobotContainer {
     m_chooser.addOption("Shooting auto", m_shooterAuto);
     m_chooser.addOption("Drive auto", m_DriveAuto);
     m_chooser.addOption("Intake down", m_IntakeDown);
+    m_chooser.addOption("Path", m_Path);
     m_chooser.setDefaultOption("Shoot, then Drive", m_ShootNDriveAuto);
     //m_chooser.setDefaultOption("standby", null);
     SmartDashboard.putData(m_chooser);
@@ -208,15 +209,15 @@ public class RobotContainer {
   /**
    * Use this to pass the autonomous command to tgihe main {@link Robot} class.
    *
-   * @return the command to run in autonomous
+   * @return the command to run in autonomous  
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return m_chooser.getSelected();
+    return m_chooser.getSelected();
     //return m_shooterAuto;
     // return m_chooser.getSelected();
     // return m_DriveAuto;
     // return m_ShootNDriveAuto;
-    return m_IntakeDown;
+    // return m_IntakeDown;
 }
 }

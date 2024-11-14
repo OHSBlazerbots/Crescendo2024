@@ -48,9 +48,17 @@
         crosshair-color="white"
     ></frc-camera-wrapper><frc-number-bar
         source-provider="NetworkTables"
-        style="transform: translate(139px, 120px);"
-        source-key="/SmartDashboard/Swivle motor position"
-    ></frc-number-bar></dashboard-tab><dashboard-tab
+        style="transform: translate(167px, 125px);"
+        source-key="/SmartDashboard/Climber left motor position"
+    ></frc-number-bar><frc-number-bar
+        source-provider="NetworkTables"
+        style="transform: translate(561px, 122px);"
+        source-key="/SmartDashboard/Climber right motor position"
+    ></frc-number-bar><frc-boolean-box
+        source-provider="NetworkTables"
+        style="transform: translate(73px, 66px);"
+        source-key="/SmartDashboard/Intake has note"
+    ></frc-boolean-box></dashboard-tab><dashboard-tab
     tab-name="Tab 2"
     slot="tab"
     source-provider="NetworkTables"

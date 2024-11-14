@@ -47,16 +47,21 @@ public boolean getIntakeHasNote() {
    return !m_IntakeLimitSwitch.get();
  }
 
-public void setIntakeSpeed(double speed) {
-
-    if(getIntakeHasNote() == true){
+ public void turnOffMotorIfHaveNote(){
+   if(getIntakeHasNote() == true){
       System.out.println("Note is in");
-      if(speed > 0){
+      if(m_intakeMotor.get() >= 0){
          m_intakeMotor.set(0);
       }
-    } else {
+   }
+      
+ }
+public void setIntakeSpeed(double speed) {
+
+    
+    
       m_intakeMotor.set(speed);
-    }
+    
  }
  public void setSwivelSpeed(double speed) {
     m_swivelMotor.set(speed);
@@ -79,6 +84,7 @@ public boolean isIntakeUp(){
     SmartDashboard.putNumber("Swivle set output", m_swivelMotor.get());
     SmartDashboard.putNumber("Swivle motor position", m_swivelEncoder.getPosition());
     SmartDashboard.putBoolean("Intake has note", getIntakeHasNote());
+    turnOffMotorIfHaveNote();
   }
 
 } 

@@ -29,21 +29,22 @@ float rightReverseLimit = (float)SmartDashboard.getNumber("Right reverse Soft Li
 float leftForwardLimit = (float) SmartDashboard.getNumber("Left forward Soft Limit", 700);
 float leftReverseLimit = (float)SmartDashboard.getNumber("Left reverse Soft Limit", -700);
 
-SmartDashboard.putNumber("Right forward Soft Limit", rightForwardLimit);
-SmartDashboard.putNumber("Right reverse Soft Limit", rightReverseLimit);
-SmartDashboard.putNumber("Left forward Soft Limit", leftForwardLimit);
-SmartDashboard.putNumber("Left reverse Soft Limit", leftReverseLimit);
+// SmartDashboard.putNumber("Right forward Soft Limit", rightForwardLimit);
+// SmartDashboard.putNumber("Right reverse Soft Limit", rightReverseLimit);
+// SmartDashboard.putNumber("Left forward Soft Limit", leftForwardLimit);
+// SmartDashboard.putNumber("Left reverse Soft Limit", leftReverseLimit);
     
     m_rightMotor.restoreFactoryDefaults();
     m_leftMotor.restoreFactoryDefaults();
     m_rightMotor.setIdleMode(IdleMode.kBrake);
     m_leftMotor.setIdleMode(IdleMode.kBrake);
-    m_rightMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-   m_rightMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false); 
+    
+    m_rightMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+   m_rightMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true); 
    m_rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, rightForwardLimit);
    m_rightMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, rightReverseLimit);
-   m_leftMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-   m_leftMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+   m_leftMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+   m_leftMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
    m_leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, leftForwardLimit);
    m_leftMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, leftReverseLimit);
     // Current limiting
@@ -77,9 +78,7 @@ public void setRightClimberSpeed(double rightSpeed){
     SmartDashboard.putNumber("Climber right Motor set output", m_rightMotor.get());
     SmartDashboard.putNumber("Climber left Motor set output", m_leftMotor.get());
     SmartDashboard.putNumber("Climber left motor position", m_leftClimbEncoder.getPosition());
-    SmartDashboard.putNumber("Climber right motor position", m_rightClimbEncoder.getPosition());
-    System.out.println("it's working");
-    
+    SmartDashboard.putNumber("Climber right motor position", m_rightClimbEncoder.getPosition());    
   }
 
 
