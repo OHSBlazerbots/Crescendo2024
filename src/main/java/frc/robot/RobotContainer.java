@@ -5,6 +5,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
+
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootingAuto;
 import frc.robot.commands.IntakeDown;
@@ -59,7 +60,7 @@ public class RobotContainer {
   private Command m_IntakeDown = new IntakeDown(m_IntakeSubsystem);
   private Command m_IntakeUp = new IntakeUp(m_IntakeSubsystem);
   private Command m_ShootNDriveAuto = m_shooterAuto.andThen(m_DriveAuto);
-  private Command m_Path = m_DriveSubsystem.getAutonomousCommand(null, false);
+  private Command m_Path = m_DriveSubsystem.getAutonomousCommand("Right Speaker to Right Note", true);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -115,6 +116,7 @@ public class RobotContainer {
     m_chooser.addOption("Shooting auto", m_shooterAuto);
     m_chooser.addOption("Drive auto", m_DriveAuto);
     m_chooser.addOption("Intake down", m_IntakeDown);
+    m_chooser.addOption("Intake Up", m_IntakeUp);
     m_chooser.addOption("Path", m_Path);
     m_chooser.setDefaultOption("Shoot, then Drive", m_ShootNDriveAuto);
     //m_chooser.setDefaultOption("standby", null);
@@ -213,11 +215,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return m_chooser.getSelected();
+    // return m_chooser.getSelected();
     //return m_shooterAuto;
     // return m_chooser.getSelected();
     // return m_DriveAuto;
     // return m_ShootNDriveAuto;
     // return m_IntakeDown;
+    return m_Path;
 }
 }
