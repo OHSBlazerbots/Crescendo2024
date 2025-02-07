@@ -44,14 +44,11 @@ public void setShooterSpeed(double speed) {
     System.out.println("dashboard=" + SmartDashboard.getNumber("Intake/Speed Output", 0));
     m_leadMotor.set(speed);
     m_secondaryMotor.set(-speed);
-    writeMetricsToSmartDashboard();
  }
-
- public void writeMetricsToSmartDashboard() {
-    shooter.writeMetricsToSmartDashboard();
+ @Override
+  public void periodic() {
     SmartDashboard.putNumber("Motor set output", m_leadMotor.get());
     SmartDashboard.putNumber("Motor set output", m_secondaryMotor.get());
- }
-
+  }
 }
 
